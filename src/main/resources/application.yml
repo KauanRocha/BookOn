@@ -1,0 +1,30 @@
+server:
+   port: 8080
+   error:
+      include-message: ALWAYS
+      include-binding-errors: ALWAYS
+      include-stacktrace: NEVER
+      include-exception: false
+
+spring:
+   application:
+      name: bookon-api
+   profiles:
+      active: dev
+   devtools:
+      livereload:
+         port: 35730
+   main:
+      allow-circular-references: true
+   datasource:
+      url: jdbc:postgresql://localhost:15432/bookon
+      username: bookon
+      password: bookon
+   jpa:
+      hibernate:
+         ddl-auto: update
+
+bezkoder:
+   app:
+      jwtSecret: ======================bookon===========================
+      jwtExpirationMs: 86400000

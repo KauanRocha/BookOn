@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+
+  bookonpostgresql:
+    image: postgres:latest
+    container_name: bookonpostgresql
+    hostname: bookonpostgresql
+    restart: unless-stopped
+    environment:
+      - "POSTGRES_DB=bookon"
+      - "POSTGRES_USER=bookon"
+      - "POSTGRES_PASSWORD=bookon"
+    volumes:
+      - ./data/postgresql:/var/lib/postgresql/data 
+    ports:
+      - "15432:5432"
+    networks:
+      - bookon-network
+
+networks:
+  bookon-network:
+    driver: bridge

@@ -1,0 +1,61 @@
+package br.com.bookon.server.payload.request;
+
+import br.com.bookon.server.models.Book;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public class BookRequest {
+
+    @NotBlank
+    private String title;
+
+    @NotBlank
+    private String author;
+
+    @NotBlank
+    private String category;
+
+    @NotNull
+    private Long userId;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+    
+    Book build() {
+    	Book book = new Book();
+    	book.setAuthor(author);
+    	book.setTitle(title);
+    	book.setCategory(category);
+    	
+    	return book;
+    }
+}
