@@ -12,12 +12,12 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>br.com.eletrolife</groupId>
+	<groupId>br.com.bookon</groupId>
 	<artifactId>server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>Eletrolife server</name>
-	<description>https://eletrolife.com.br</description>
+	<name>BookON server</name>
+	<description>https://bookon.com.br</description>
 
 	<properties>
 		<java.version>17</java.version>

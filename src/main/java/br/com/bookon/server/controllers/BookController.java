@@ -1,5 +1,7 @@
 package br.com.bookon.server.controllers;
 
+import br.com.bookon.server.payload.request.BookRequest;
+import br.com.bookon.server.payload.response.BookResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,15 +11,15 @@ import br.com.bookon.server.services.BookService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("api/books")
 public class BookController {
 
 	@Autowired
     private BookService bookService;
 
-    @PostMapping
-    public Book createBook(@RequestBody Book book, int userId) {
-        return bookService.createBook(book);
+    @PostMapping("/new/{user_id}")
+    public BookResponse createBook(@RequestBody BookRequest book, @PathVariable int userId) {
+        return new BookResponse(bookService.createBook(book, userId));
     }
 
     @GetMapping

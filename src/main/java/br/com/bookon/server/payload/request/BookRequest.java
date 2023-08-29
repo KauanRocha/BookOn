@@ -18,27 +18,27 @@ public class BookRequest {
     @NotNull
     private Long userId;
 
-    public String getTitle() {
+    public String getBookTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setBookTitle(String title) {
         this.title = title;
     }
 
-    public String getAuthor() {
+    public String getBookAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setBookAuthor(String author) {
         this.author = author;
     }
 
-    public String getCategory() {
+    public String getBookCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setBookCategory(String category) {
         this.category = category;
     }
 
@@ -50,10 +50,10 @@ public class BookRequest {
         this.userId = userId;
     }
     
-    Book build() {
+    public Book build() {
     	Book book = new Book();
+        book.setTitle(title);
     	book.setAuthor(author);
-    	book.setTitle(title);
     	book.setCategory(category);
     	
     	return book;
