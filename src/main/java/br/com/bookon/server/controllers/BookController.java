@@ -17,9 +17,9 @@ public class BookController {
 	@Autowired
     private BookService bookService;
 
-    @PostMapping("/new/{user_id}")
-    public BookResponse createBook(@RequestBody BookRequest book, @PathVariable int userId) {
-        return new BookResponse(bookService.createBook(book, userId));
+    @PostMapping("/{userId}")
+    public BookResponse createBook(@RequestBody BookRequest bookRequest, @PathVariable("userId") Integer userId) throws Exception {
+        return new BookResponse(bookService.createBook(bookRequest, userId));
     }
 
     @GetMapping

@@ -23,6 +23,11 @@ spring:
    jpa:
       hibernate:
          ddl-auto: update
+         
+logging:
+  level:
+    com.fasterxml.jackson.databind: ERROR
+         
 
 bezkoder:
    app:

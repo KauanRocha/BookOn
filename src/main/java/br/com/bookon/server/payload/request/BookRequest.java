@@ -15,42 +15,38 @@ public class BookRequest {
     @NotBlank
     private String category;
 
-    @NotNull
-    private Long userId;
 
-    public String getBookTitle() {
-        return title;
-    }
+    public String getTitle() {
+		return title;
+	}
 
-    public void setBookTitle(String title) {
-        this.title = title;
-    }
 
-    public String getBookAuthor() {
-        return author;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setBookAuthor(String author) {
-        this.author = author;
-    }
 
-    public String getBookCategory() {
-        return category;
-    }
+	public String getAuthor() {
+		return author;
+	}
 
-    public void setBookCategory(String category) {
-        this.category = category;
-    }
 
-    public Long getUserId() {
-        return userId;
-    }
+	public void setAuthor(String author) {
+		this.author = author;
+	}
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-    
-    public Book build() {
+
+	public String getCategory() {
+		return category;
+	}
+
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+
+	public Book build() {
     	Book book = new Book();
         book.setTitle(title);
     	book.setAuthor(author);
