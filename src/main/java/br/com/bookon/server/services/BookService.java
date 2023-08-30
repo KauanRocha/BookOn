@@ -1,12 +1,18 @@
 package br.com.bookon.server.services;
 
+import br.com.bookon.server.models.User;
+import br.com.bookon.server.payload.request.BookRequest;
+import br.com.bookon.server.repository.UserRepository;
+import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import br.com.bookon.server.models.Book;
 import br.com.bookon.server.repository.BookRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookService {
@@ -15,12 +21,24 @@ public class BookService {
     private BookRepository bookRepository;
 
     @Autowired
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
+    private UserRepository userRepository;
 
-    public Book createBook(Book book) {
-        return bookRepository.save(book);
+    public void Save(Book book, int userId) {
+        Optional<User> user = userRepository.findById(userId);
+
+        if (user.isEmpty()) {
+//          ("Usuário não encontrado com o ID: " + userId)
+            throw new Error();
+        }
+
+        book.setUser(user.get());
+        bookRepository.save(book);
+    }
+    public Book createBook(BookRequest bookRequest, int userId) {
+        Book book = bookRequest.build();
+        Save(book, userId);
+
+        return book;
     }
 
     public List<Book> getAllBooks() {
