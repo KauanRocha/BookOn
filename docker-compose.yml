@@ -17,6 +17,25 @@ services:
       - "15432:5432"
     networks:
       - bookon-network
+      
+  bookonmongo:
+    image: mongo:latest
+    container_name: bookonmongo
+    hostname: bookonmongo
+    restart: unless-stopped
+    environment:
+      - "MONGO_INITDB_ROOT_USERNAME=bookon"
+      - "MONGO_INITDB_ROOT_PASSWORD=bookon"
+    healthcheck:
+      test: echo 'db.stats().ok' | mongo localhost:27017/bookon --quiet
+      start_period: 10s
+    volumes:
+      - ./data/mongo:/data/db
+      - ./docker/mongo:/docker-entrypoint-initdb.d
+    ports:
+      - "27017:27017"
+    networks:
+      - bookon-network
 
 networks:
   bookon-network:
