@@ -1,6 +1,11 @@
 package br.com.bookon.server.models;
 
 import jakarta.persistence.Entity;
+
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,18 +15,26 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "books")
-public class Book {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Book implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    private String title;
-    private String author;
-    private String category;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+	private String title;
+	private String author;
+	private String category;
+
+	@ManyToOne
+	@JoinColumn(name = "user_id") 
+	private User user;
+
+	public Book() {
+	}
 
 	public Long getId() {
 		return id;
@@ -54,12 +67,21 @@ public class Book {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-
+	
 	public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Book(Long id, String title, String author, String category, User user) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.author = author;
+		this.category = category;
 		this.user = user;
 	}
 }

@@ -2,7 +2,6 @@ package br.com.bookon.server.payload.request;
 
 import br.com.bookon.server.models.Book;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public class BookRequest {
 

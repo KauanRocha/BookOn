@@ -1,12 +1,14 @@
 package br.com.bookon.server.controllers;
 
 import br.com.bookon.server.payload.request.BookRequest;
-import br.com.bookon.server.payload.response.BookResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.bookon.server.models.Book;
 import br.com.bookon.server.services.BookService;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -17,19 +19,19 @@ public class BookController {
 	@Autowired
     private BookService bookService;
 
-    @PostMapping("/{userId}")
-    public BookResponse createBook(@RequestBody BookRequest bookRequest, @PathVariable("userId") Integer userId) throws Exception {
-        return new BookResponse(bookService.createBook(bookRequest, userId));
+    @PostMapping("{userId}")
+    public ResponseEntity<?> createBook(@Valid @RequestBody BookRequest bookRequest, @PathVariable("userId") Integer userId){
+    	return bookService.createBook(bookRequest, userId);
     }
 
     @GetMapping
-    public List<Book> getAllBooks() {
+    public ResponseEntity<List<?>> getAllBooks() {
         return bookService.getAllBooks();
     }
 
     @GetMapping("/{id}")
-    public Book getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id);
+    public ResponseEntity<?> getBookById(@PathVariable Long id) {
+    	return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBooks());
     }
 
     @PutMapping("/{id}")
