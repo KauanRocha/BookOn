@@ -1,6 +1,5 @@
 package br.com.bookon.server.models.mongo;
 
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -22,8 +21,7 @@ public class Loan {
     private Book book;
 
     @Field("startDate")
-    @CreatedDate
-    private LocalDateTime startDate;
+    private LocalDateTime startDate = LocalDateTime.now();
 
     @Field("returnDate")
     private LocalDateTime returnDate;
@@ -72,10 +70,15 @@ public class Loan {
 		this.returnDate = returnDate;
 	}
 
-	public Loan(User borrowerUser, User lenderUser, Book book) {
+	public Loan(String id, User borrowerUser, User lenderUser, Book book, LocalDateTime startDate,
+			LocalDateTime returnDate) {
+		super();
+		this.id = id;
 		this.borrowerUser = borrowerUser;
 		this.lenderUser = lenderUser;
 		this.book = book;
+		this.startDate = startDate;
+		this.returnDate = returnDate;
 	}
 
 	public Loan() {

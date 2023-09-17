@@ -6,20 +6,16 @@ public class BookResponse {
 
 	private Book book;
 
-	public Book getBook() {
-		return book;
-	}
-
-	public void setBook(Book book) {
-		this.book = book;
-	}
-	
 	public Long getId() {
 		return book.getId();
 	}
 	
 	public String getTitle() {
 		return book.getTitle();
+	}
+
+	public BookResponse(Book book) {
+		this.book = book;
 	}
 	
 }

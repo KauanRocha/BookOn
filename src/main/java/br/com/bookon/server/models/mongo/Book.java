@@ -14,13 +14,16 @@ public class Book {
 	public String getTitle() {
 		return title;
 	}
-	public void setTitle(String name) {
-		this.title = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
-	
+
 	public Book(br.com.bookon.server.models.postgres.Book book) {
 		this.id = book.getId();
 		this.title = book.getTitle();
-		
 	}
+	
+	public Book() {
+	}
+	
 }
