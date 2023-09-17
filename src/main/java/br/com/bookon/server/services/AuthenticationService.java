@@ -11,8 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import br.com.bookon.server.payload.request.LoginRequest;
-import br.com.bookon.server.payload.response.JwtResponse;
+import br.com.bookon.server.payload.request.postgres.LoginRequest;
+import br.com.bookon.server.payload.response.postgres.JwtResponse;
 import br.com.bookon.server.security.jwt.JwtUtils;
 import br.com.bookon.server.security.services.UserDetailsImpl;
 

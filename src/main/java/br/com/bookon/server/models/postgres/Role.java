@@ -1,4 +1,4 @@
-package br.com.bookon.server.models.postgre;
+package br.com.bookon.server.models.postgres;
 
 import br.com.bookon.server.enumerations.RoleEnum;
 import jakarta.persistence.Column;

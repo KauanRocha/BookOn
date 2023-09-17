@@ -1,4 +1,4 @@
-package br.com.bookon.server.models.postgre;
+package br.com.bookon.server.models.postgres;
 
 import jakarta.persistence.Entity;
 

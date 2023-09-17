@@ -4,10 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import br.com.bookon.server.models.postgre.Book;
-import br.com.bookon.server.models.postgre.User;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Document(collection = "loans")
 public class Loan {
@@ -24,19 +21,10 @@ public class Loan {
     private Book book;
 
     @Field("startDate")
-    private LocalDate startDate;
-
-    @Field("dueDate")
-    private LocalDate dueDate;
+    private LocalDateTime startDate = LocalDateTime.now();
 
     @Field("returnDate")
-    private LocalDate returnDate;
-
-    @Field("returned")
-    private boolean returned;
-
-    @Field("lateFee")
-    private double lateFee;
+    private LocalDateTime returnDate;
 
 	public String getId() {
 		return id;
@@ -66,58 +54,31 @@ public class Loan {
 		this.book = book;
 	}
 
-	public LocalDate getStartDate() {
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(LocalDate startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
 
-	public LocalDate getDueDate() {
-		return dueDate;
-	}
-
-	public void setDueDate(LocalDate dueDate) {
-		this.dueDate = dueDate;
-	}
-
-	public LocalDate getReturnDate() {
+	public LocalDateTime getReturnDate() {
 		return returnDate;
 	}
 
-	public void setReturnDate(LocalDate returnDate) {
+	public void setReturnDate(LocalDateTime returnDate) {
 		this.returnDate = returnDate;
 	}
 
-	public boolean isReturned() {
-		return returned;
-	}
-
-	public void setReturned(boolean returned) {
-		this.returned = returned;
-	}
-
-	public double getLateFee() {
-		return lateFee;
-	}
-
-	public void setLateFee(double lateFee) {
-		this.lateFee = lateFee;
-	}
-
-	public Loan(String id, User borrowerUser, User lenderUser, Book book, LocalDate startDate, LocalDate dueDate,
-			LocalDate returnDate, boolean returned, double lateFee) {
+	public Loan(String id, User borrowerUser, User lenderUser, Book book, LocalDateTime startDate,
+			LocalDateTime returnDate) {
 		super();
 		this.id = id;
 		this.borrowerUser = borrowerUser;
 		this.lenderUser = lenderUser;
 		this.book = book;
 		this.startDate = startDate;
-		this.dueDate = dueDate;
 		this.returnDate = returnDate;
-		this.returned = returned;
-		this.lateFee = lateFee;
 	}
 
 	public Loan() {

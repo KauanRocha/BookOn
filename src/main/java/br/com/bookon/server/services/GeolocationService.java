@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import br.com.bookon.server.payload.response.GeolocationResponse;
+import br.com.bookon.server.payload.response.postgres.GeolocationResponse;
 
 @Service
 public class GeolocationService {

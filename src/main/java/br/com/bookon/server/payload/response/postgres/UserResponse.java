@@ -1,9 +1,9 @@
-package br.com.bookon.server.payload.response;
+package br.com.bookon.server.payload.response.postgres;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import br.com.bookon.server.models.postgre.User;
+import br.com.bookon.server.models.postgres.User;
 
 public class UserResponse {
 

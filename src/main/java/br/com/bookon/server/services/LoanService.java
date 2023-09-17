@@ -4,10 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.bookon.server.models.mongo.Loan;
+import br.com.bookon.server.models.postgres.Book;
+import br.com.bookon.server.models.postgres.User;
+import br.com.bookon.server.payload.request.mongo.LoanRequest;
+import br.com.bookon.server.payload.response.mongo.LoanResponse;
 import br.com.bookon.server.repository.mongo.LoanRepository;
+import br.com.bookon.server.repository.postgres.BookRepository;
+import br.com.bookon.server.repository.postgres.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LoanService {
@@ -15,30 +21,53 @@ public class LoanService {
     @Autowired
     private LoanRepository loanRepository;
     
-    public List<Loan> getAllLoans() {
-        return loanRepository.findAll();
+    @Autowired
+    private UserRepository userRepository;
+    
+    @Autowired
+    private BookRepository bookRepository;
+    
+    public List<LoanResponse> getAllLoans() {
+        List<Loan> loans = loanRepository.findAll();
+        List<LoanResponse> loanResponses = new ArrayList<>();
+
+        for (Loan loan : loans) {
+            var loanResponse = new LoanResponse(loan);
+            loanResponses.add(loanResponse);
+        }
+
+        return loanResponses;
     }
 
-    public Loan getLoanById(String id) {
-        Optional<Loan> loan = loanRepository.findById(id);
-        return loan.orElse(null);
+    public LoanResponse getLoanById(String id) {
+        Loan loan = loanRepository.findById(id).orElse(null);
+        return new LoanResponse(loan);
     }
 
-    public Loan createLoan(Loan loan) {
-    	
-        Loan loan2 = new Loan();
+    public LoanResponse createLoan(LoanRequest loanRequest) {
+    	Loan loan = new Loan();
+        User borrowerPostgres = userRepository.findById(loanRequest.getBorrowerId()).orElseThrow(null);
+        br.com.bookon.server.models.mongo.User borrower = new br.com.bookon.server.models.mongo.User(borrowerPostgres);
+        loan.setBorrowerUser(borrower);
         
-        return loanRepository.save(loan2);
+        User lenderPostgres = userRepository.findById(loanRequest.getLenderId()).orElseThrow(null);
+        br.com.bookon.server.models.mongo.User lender = new br.com.bookon.server.models.mongo.User(lenderPostgres);
+        loan.setLenderUser(lender);
+        
+        Book bookPostgres = bookRepository.findById(loanRequest.getBookId()).orElseThrow(null);
+        br.com.bookon.server.models.mongo.Book book = new br.com.bookon.server.models.mongo.Book(bookPostgres);
+        loan.setBook(book);
+        loan.setReturnDate(null);
+        
+        return new LoanResponse(loanRepository.save(loan));
     }
-
 
     public boolean deleteLoan(String id) {
-        // Verifique se o empréstimo com o ID especificado existe
         if (loanRepository.existsById(id)) {
             loanRepository.deleteById(id);
-            return true; // Empréstimo excluído com sucesso
+            return true; 
         } else {
-            return false; // Empréstimo não encontrado
+            return false;
         }
     }
 }

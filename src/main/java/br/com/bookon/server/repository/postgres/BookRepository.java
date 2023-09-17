@@ -6,7 +6,7 @@ import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.bookon.server.models.postgre.Book;
+import br.com.bookon.server.models.postgres.Book;
 
 @Repository
 public interface BookRepository extends PagingAndSortingRepository<Book, Long>, JpaSpecificationExecutor<Book>, ListCrudRepository<Book, Long> {

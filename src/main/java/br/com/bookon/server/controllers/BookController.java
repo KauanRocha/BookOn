@@ -1,7 +1,8 @@
 package br.com.bookon.server.controllers;
 
-import br.com.bookon.server.models.postgre.Book;
-import br.com.bookon.server.payload.request.BookRequest;
+import br.com.bookon.server.models.postgres.Book;
+import br.com.bookon.server.payload.request.postgres.BookRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

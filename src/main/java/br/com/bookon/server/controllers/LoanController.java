@@ -5,7 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import br.com.bookon.server.models.mongo.Loan;
+import br.com.bookon.server.payload.request.mongo.LoanRequest;
+import br.com.bookon.server.payload.response.mongo.LoanResponse;
 import br.com.bookon.server.services.LoanService;
 
 import java.util.List;
@@ -16,17 +17,16 @@ public class LoanController {
 
     @Autowired
     private LoanService loanService;
-    
 
     @GetMapping
-    public ResponseEntity<List<Loan>> getAllLoans() {
-        List<Loan> loans = loanService.getAllLoans();
+    public ResponseEntity<List<LoanResponse>> getAllLoans() {
+        List<LoanResponse> loans = loanService.getAllLoans();
         return new ResponseEntity<>(loans, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Loan> getLoanById(@PathVariable String id) {
-        Loan loan = loanService.getLoanById(id);
+    public ResponseEntity<LoanResponse> getLoanById(@PathVariable String id) {
+    	var loan = loanService.getLoanById(id);
         if (loan != null) {
             return new ResponseEntity<>(loan, HttpStatus.OK);
         } else {
@@ -35,11 +35,10 @@ public class LoanController {
     }
 
     @PostMapping
-    public ResponseEntity<Loan> createLoan(@RequestBody Loan loan) {
-        Loan createdLoan = loanService.createLoan(loan);
+    public ResponseEntity<LoanResponse> createLoan(@RequestBody LoanRequest loanRequest) {
+    	var createdLoan = loanService.createLoan(loanRequest);
         return new ResponseEntity<>(createdLoan, HttpStatus.CREATED);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLoan(@PathVariable String id) {
