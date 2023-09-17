@@ -7,27 +7,23 @@ server:
       include-exception: false
 
 spring:
-   application:
-      name: bookon-api
-   profiles:
-      active: dev
-   devtools:
-      livereload:
-         port: 35730
-   main:
-      allow-circular-references: true
-   datasource:
-      url: jdbc:postgresql://localhost:15432/bookon
-      username: bookon
-      password: bookon
-   jpa:
-      hibernate:
-         ddl-auto: update
-         
-logging:
-  level:
-    com.fasterxml.jackson.databind: ERROR
-         
+  datasource:
+    url: jdbc:postgresql://localhost:15432/bookon
+    username: server
+    password: server
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: bookon
+      username: server
+      password: server
+
 
 bezkoder:
    app:

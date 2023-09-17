@@ -1,4 +1,4 @@
-package br.com.bookon.server.repository;
+package br.com.bookon.server.repository.postgres;
 
 import java.util.Optional;
 
@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import br.com.bookon.server.enumerations.RoleEnum;
-import br.com.bookon.server.models.Role;
+import br.com.bookon.server.models.postgre.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {

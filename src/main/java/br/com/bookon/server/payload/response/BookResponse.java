@@ -1,6 +1,6 @@
 package br.com.bookon.server.payload.response;
 
-import br.com.bookon.server.models.Book;
+import br.com.bookon.server.models.postgre.Book;
 
 public class BookResponse {
 	  private Book book;
@@ -24,4 +24,5 @@ public class BookResponse {
 	    public Integer getUserId() {
 	        return book.getUser().getId();
 	    }
+	    
 }

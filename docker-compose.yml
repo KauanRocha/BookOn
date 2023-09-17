@@ -2,38 +2,59 @@ version: "3.8"
 
 services:
 
-  bookonpostgresql:
+  serverpostgresql:
     image: postgres:latest
-    container_name: bookonpostgresql
-    hostname: bookonpostgresql
+    container_name: serverpostgresql
+    hostname: serverpostgresql
     restart: unless-stopped
     environment:
-      - "POSTGRES_DB=bookon"
-      - "POSTGRES_USER=bookon"
-      - "POSTGRES_PASSWORD=bookon"
+      POSTGRES_DB: bookon
+      POSTGRES_USER: server
+      POSTGRES_PASSWORD: server
     volumes:
       - ./data/postgresql:/var/lib/postgresql/data 
     ports:
       - "15432:5432"
     networks:
       - bookon-network
-      
-  bookonmongo:
+
+  servermongo:
     image: mongo:latest
-    container_name: bookonmongo
-    hostname: bookonmongo
+    container_name: servermongo
+    hostname: servermongo
     restart: unless-stopped
     environment:
-      - "MONGO_INITDB_ROOT_USERNAME=bookon"
-      - "MONGO_INITDB_ROOT_PASSWORD=bookon"
+      MONGO_INITDB_ROOT_USERNAME: server
+      MONGO_INITDB_ROOT_PASSWORD: server
     healthcheck:
-      test: echo 'db.stats().ok' | mongo localhost:27017/bookon --quiet
+      test: echo 'db.stats().ok' | mongo localhost:27017/server --quiet
       start_period: 10s
     volumes:
       - ./data/mongo:/data/db
       - ./docker/mongo:/docker-entrypoint-initdb.d
     ports:
       - "27017:27017"
+    networks:
+      - bookon-network
+      
+  yuzermongoexpress:
+    image: mongo-express:latest
+    container_name: servermongoexpress
+    hostname: servermongoexpress
+    restart: unless-stopped
+    ports:
+      - "18081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "false"
+      ME_CONFIG_MONGODB_AUTH_DATABASE: bookon
+      ME_CONFIG_MONGODB_AUTH_USERNAME: server
+      ME_CONFIG_MONGODB_AUTH_PASSWORD: server
+      ME_CONFIG_MONGODB_SERVER: servermongo
+      ME_CONFIG_MONGODB_PORT: "27017"
+      ME_CONFIG_BASICAUTH_USERNAME: server
+      ME_CONFIG_BASICAUTH_PASSWORD: server
+    depends_on:
+      - servermongo
     networks:
       - bookon-network
 

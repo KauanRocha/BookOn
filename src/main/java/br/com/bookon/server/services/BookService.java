@@ -1,16 +1,16 @@
 package br.com.bookon.server.services;
 
-import br.com.bookon.server.models.User;
+import br.com.bookon.server.models.postgre.Book;
+import br.com.bookon.server.models.postgre.User;
 import br.com.bookon.server.payload.request.BookRequest;
 import br.com.bookon.server.payload.response.BookResponse;
-import br.com.bookon.server.repository.UserRepository;
+import br.com.bookon.server.repository.postgres.BookRepository;
+import br.com.bookon.server.repository.postgres.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import br.com.bookon.server.models.Book;
-import br.com.bookon.server.repository.BookRepository;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package br.com.bookon.server.payload.request;
 
-import br.com.bookon.server.models.Book;
+import br.com.bookon.server.models.postgre.Book;
 import jakarta.validation.constraints.NotBlank;
 
 public class BookRequest {

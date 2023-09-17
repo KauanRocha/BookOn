@@ -1,12 +1,12 @@
 package br.com.bookon.server.controllers;
 
+import br.com.bookon.server.models.postgre.Book;
 import br.com.bookon.server.payload.request.BookRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import br.com.bookon.server.models.Book;
 import br.com.bookon.server.services.BookService;
 import jakarta.validation.Valid;
 
@@ -19,7 +19,7 @@ public class BookController {
 	@Autowired
     private BookService bookService;
 
-    @PostMapping("{userId}")
+    @PostMapping("/{userId}")
     public ResponseEntity<?> createBook(@Valid @RequestBody BookRequest bookRequest, @PathVariable("userId") Integer userId){
     	return bookService.createBook(bookRequest, userId);
     }
