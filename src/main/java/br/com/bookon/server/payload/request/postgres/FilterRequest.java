@@ -1,4 +1,4 @@
-package br.com.bookon.server.payload.request;
+package br.com.bookon.server.payload.request.postgres;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
-package br.com.bookon.server.payload.response;
+package br.com.bookon.server.payload.response.postgres;
 
-import br.com.bookon.server.models.postgre.Book;
+import br.com.bookon.server.models.postgres.Book;
 
 public class BookResponse {
 	  private Book book;

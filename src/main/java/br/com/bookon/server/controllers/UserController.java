@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.bookon.server.payload.request.FilterRequest;
-import br.com.bookon.server.payload.response.UserResponse;
+import br.com.bookon.server.payload.request.postgres.FilterRequest;
+import br.com.bookon.server.payload.response.postgres.UserResponse;
 import br.com.bookon.server.services.UserService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)

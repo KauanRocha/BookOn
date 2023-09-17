@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.bookon.server.payload.request.LoginRequest;
-import br.com.bookon.server.payload.request.RegisterRequest;
+import br.com.bookon.server.payload.request.postgres.LoginRequest;
+import br.com.bookon.server.payload.request.postgres.RegisterRequest;
 import br.com.bookon.server.services.AuthenticationService;
 import br.com.bookon.server.services.UserService;
 import jakarta.validation.Valid;

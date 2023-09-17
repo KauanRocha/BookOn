@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.bookon.server.models.postgre.User;
+import br.com.bookon.server.models.postgres.User;
 import br.com.bookon.server.repository.postgres.UserRepository;
 
 @Service

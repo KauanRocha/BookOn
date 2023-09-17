@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.bookon.server.models.mongo.Loan;
+import br.com.bookon.server.payload.request.mongo.LoanRequest;
 import br.com.bookon.server.services.LoanService;
 
 import java.util.List;
@@ -16,7 +17,6 @@ public class LoanController {
 
     @Autowired
     private LoanService loanService;
-    
 
     @GetMapping
     public ResponseEntity<List<Loan>> getAllLoans() {
@@ -35,8 +35,8 @@ public class LoanController {
     }
 
     @PostMapping
-    public ResponseEntity<Loan> createLoan(@RequestBody Loan loan) {
-        Loan createdLoan = loanService.createLoan(loan);
+    public ResponseEntity<Loan> createLoan(@RequestBody LoanRequest loanRequest) {
+        Loan createdLoan = loanService.createLoan(loanRequest);
         return new ResponseEntity<>(createdLoan, HttpStatus.CREATED);
     }
 

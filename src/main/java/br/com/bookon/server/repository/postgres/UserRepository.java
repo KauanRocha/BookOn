@@ -7,7 +7,7 @@ import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.bookon.server.models.postgre.User;
+import br.com.bookon.server.models.postgres.User;
 
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<User, Integer>, JpaSpecificationExecutor<User>, ListCrudRepository<User, Integer> {
