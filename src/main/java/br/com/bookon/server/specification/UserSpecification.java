@@ -3,7 +3,7 @@ package br.com.bookon.server.specification;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.bookon.server.models.User;
+import br.com.bookon.server.models.postgre.User;
 import br.com.bookon.server.payload.request.FilterRequest;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;

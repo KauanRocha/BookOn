@@ -1,7 +1,7 @@
 package br.com.bookon.server.payload.response;
 
 import br.com.bookon.server.enumerations.RoleEnum;
-import br.com.bookon.server.models.Role;
+import br.com.bookon.server.models.postgre.Role;
 
 public class RoleResponse {
 

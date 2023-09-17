@@ -1,16 +1,18 @@
-package br.com.bookon.server.models;
+package br.com.bookon.server.models.mongo;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import br.com.bookon.server.models.postgre.Book;
+import br.com.bookon.server.models.postgre.User;
+
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Document(collection = "loans")
 public class Loan {
     @Id
-    private UUID id;
+    private String id;
     
     @Field("borrowerUser")
     private User borrowerUser;
@@ -36,23 +38,8 @@ public class Loan {
     @Field("lateFee")
     private double lateFee;
 
-    public Loan(User borrowerUser, User lenderUser, Book book, LocalDate startDate, LocalDate dueDate) {
-        this.id = UUID.randomUUID();
-        this.borrowerUser = borrowerUser;
-        this.lenderUser = lenderUser;
-        this.book = book;
-        this.startDate = startDate;
-        this.dueDate = dueDate;
-        this.returned = false;
-        this.lateFee = 0.0;  
-    }
-
-	public UUID getId() {
+	public String getId() {
 		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public User getBorrowerUser() {
@@ -118,4 +105,22 @@ public class Loan {
 	public void setLateFee(double lateFee) {
 		this.lateFee = lateFee;
 	}
+
+	public Loan(String id, User borrowerUser, User lenderUser, Book book, LocalDate startDate, LocalDate dueDate,
+			LocalDate returnDate, boolean returned, double lateFee) {
+		super();
+		this.id = id;
+		this.borrowerUser = borrowerUser;
+		this.lenderUser = lenderUser;
+		this.book = book;
+		this.startDate = startDate;
+		this.dueDate = dueDate;
+		this.returnDate = returnDate;
+		this.returned = returned;
+		this.lateFee = lateFee;
+	}
+
+	public Loan() {
+	}
+	
 }

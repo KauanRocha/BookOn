@@ -3,7 +3,7 @@ package br.com.bookon.server.payload.response;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import br.com.bookon.server.models.User;
+import br.com.bookon.server.models.postgre.User;
 
 public class UserResponse {
 

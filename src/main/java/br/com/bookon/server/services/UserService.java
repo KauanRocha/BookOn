@@ -10,15 +10,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.bookon.server.enumerations.RoleEnum;
-import br.com.bookon.server.models.Role;
-import br.com.bookon.server.models.User;
+import br.com.bookon.server.models.postgre.Role;
+import br.com.bookon.server.models.postgre.User;
 import br.com.bookon.server.payload.request.AddressResquest;
 import br.com.bookon.server.payload.request.FilterRequest;
 import br.com.bookon.server.payload.request.RegisterRequest;
 import br.com.bookon.server.payload.response.GeolocationResponse;
 import br.com.bookon.server.payload.response.MessageResponse;
-import br.com.bookon.server.repository.RoleRepository;
-import br.com.bookon.server.repository.UserRepository;
+import br.com.bookon.server.repository.postgres.RoleRepository;
+import br.com.bookon.server.repository.postgres.UserRepository;
 import br.com.bookon.server.specification.UserSpecification;
 
 @Service
