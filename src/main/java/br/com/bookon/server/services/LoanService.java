@@ -3,6 +3,7 @@ package br.com.bookon.server.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.bookon.server.enumerations.LoanStatusEnum;
 import br.com.bookon.server.models.mongo.Loan;
 import br.com.bookon.server.models.postgres.Book;
 import br.com.bookon.server.models.postgres.User;
@@ -70,4 +71,43 @@ public class LoanService {
             return false;
         }
     }
+    
+    public LoanResponse createPropose(LoanRequest loanRequest, Integer borrowerId) {
+    	Loan loan = new Loan();
+        User borrowerPostgres = userRepository.findById(borrowerId).orElseThrow(null);
+        br.com.bookon.server.models.mongo.User borrower = new br.com.bookon.server.models.mongo.User(borrowerPostgres);
+        loan.setBorrowerUser(borrower);
+        
+        User lenderPostgres = userRepository.findById(loanRequest.getLenderId()).orElseThrow(null);
+        br.com.bookon.server.models.mongo.User lender = new br.com.bookon.server.models.mongo.User(lenderPostgres);
+        loan.setLenderUser(lender);
+        
+        Book bookPostgres = bookRepository.findById(loanRequest.getBookId()).orElseThrow(null);
+        br.com.bookon.server.models.mongo.Book book = new br.com.bookon.server.models.mongo.Book(bookPostgres);
+        loan.setBook(book);
+        loan.setReturnDate(null);
+        loan.setStatus(LoanStatusEnum.PENDING);
+        
+        return new LoanResponse(loanRepository.save(loan));
+    }
+    
+    public List<LoanResponse> listPropose(Integer lenderId) {
+        List<Loan> loans = loanRepository.findByLenderUserIdAndStatus(lenderId, LoanStatusEnum.PENDING);
+        List<LoanResponse> loanResponses = new ArrayList<>();
+
+        for (Loan loan : loans) {
+            var loanResponse = new LoanResponse(loan);
+            loanResponses.add(loanResponse);
+        }
+
+        return loanResponses;
+    }
+    
+    public void approvePropose(String loanId) {
+        Loan loan = loanRepository.findById(loanId).orElse(null);
+        loan.setStatus(LoanStatusEnum.APPROVED);
+        loanRepository.save(loan);
+        
+    }
+    
 }

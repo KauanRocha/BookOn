@@ -4,6 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import br.com.bookon.server.enumerations.LoanStatusEnum;
+
 import java.time.LocalDateTime;
 
 @Document(collection = "loans")
@@ -19,12 +21,18 @@ public class Loan {
 
     @Field("book")
     private Book book;
+    
+    @Field("status")
+    private LoanStatusEnum status;
 
     @Field("startDate")
-    private LocalDateTime startDate = LocalDateTime.now();
+    private LocalDateTime startDate;
 
     @Field("returnDate")
     private LocalDateTime returnDate;
+    
+    @Field("createAt")
+    private LocalDateTime createAt = LocalDateTime.now();
 
 	public String getId() {
 		return id;
@@ -70,8 +78,24 @@ public class Loan {
 		this.returnDate = returnDate;
 	}
 
+	public LoanStatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(LoanStatusEnum status) {
+		this.status = status;
+	}
+	
+	public LocalDateTime getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(LocalDateTime createAt) {
+		this.createAt = createAt;
+	}
+
 	public Loan(String id, User borrowerUser, User lenderUser, Book book, LocalDateTime startDate,
-			LocalDateTime returnDate) {
+			LocalDateTime returnDate, LocalDateTime createAt, LoanStatusEnum status) {
 		super();
 		this.id = id;
 		this.borrowerUser = borrowerUser;
@@ -79,6 +103,8 @@ public class Loan {
 		this.book = book;
 		this.startDate = startDate;
 		this.returnDate = returnDate;
+		this.status = status;
+		this.createAt = createAt;
 	}
 
 	public Loan() {

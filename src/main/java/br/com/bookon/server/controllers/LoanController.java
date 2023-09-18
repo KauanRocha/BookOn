@@ -49,4 +49,22 @@ public class LoanController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    
+    @PostMapping("/{borrowerId}/create")
+    public ResponseEntity<LoanResponse> createPropose(@RequestBody LoanRequest loanRequest, @PathVariable Integer borrowerId) {
+    	var createdLoan = loanService.createPropose(loanRequest, borrowerId);
+        return new ResponseEntity<>(createdLoan, HttpStatus.CREATED);
+    }
+    
+    @GetMapping("/{lenderId}/search")
+    public ResponseEntity<List<LoanResponse>> listPropose(@PathVariable Integer lenderId) {
+    	List<LoanResponse> loans = loanService.listPropose(lenderId);
+        return new ResponseEntity<>(loans, HttpStatus.OK);
+    }
+    
+    @PostMapping("/{loanId}/approve")
+    public ResponseEntity<Void> approvePropose(@PathVariable String loanId) {
+    	loanService.approvePropose(loanId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
