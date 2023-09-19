@@ -11,6 +11,11 @@ public class LoanResponse {
 	public LoanResponse(Loan loan) {
 		this.loan= loan;
 	}
+	
+	public String getId() {
+		return loan.getId();
+	}
+	
 	public UserResponse getBorrowerUser() {
 		return new UserResponse(loan.getBorrowerUser());
 	}

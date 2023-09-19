@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
-
 @Service
 public class BookService {
 
@@ -67,4 +65,5 @@ public class BookService {
         Book existingBook = getBookById(id);
         bookRepository.delete(existingBook);
     }
+    
 }

@@ -62,7 +62,7 @@ public class LoanController {
         return new ResponseEntity<>(loans, HttpStatus.OK);
     }
     
-    @PostMapping("/{loanId}/approve")
+    @PutMapping("/{loanId}/approve")
     public ResponseEntity<Void> approvePropose(@PathVariable String loanId) {
     	loanService.approvePropose(loanId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

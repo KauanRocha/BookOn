@@ -1,7 +1,9 @@
 package br.com.bookon.server.services;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,9 +19,11 @@ import br.com.bookon.server.payload.request.postgres.FilterRequest;
 import br.com.bookon.server.payload.request.postgres.RegisterRequest;
 import br.com.bookon.server.payload.response.postgres.GeolocationResponse;
 import br.com.bookon.server.payload.response.postgres.MessageResponse;
+import br.com.bookon.server.payload.response.simple.postgres.UserSimpleResponse;
 import br.com.bookon.server.repository.postgres.RoleRepository;
 import br.com.bookon.server.repository.postgres.UserRepository;
 import br.com.bookon.server.specification.UserSpecification;
+
 
 @Service
 public class UserService {
@@ -111,6 +115,25 @@ public class UserService {
         }
 
         return roles;
+    }
+    
+    public List<UserSimpleResponse> getBookByLocation(Integer userId) {
+    	User userFinder = userRepository.findById(userId).orElse(null);
+    	
+    	List<Object[]> nearbyUsers = userRepository.
+    			findIdsAndDistancesOfNearbyUsers(userId, userFinder.getLatitude(), userFinder.getLongitude());
+    	
+    	List<UserSimpleResponse> userResponseList = nearbyUsers.stream().map(userData -> {
+    	    User userFound = userRepository.findById((Integer) userData[0]).orElse(null);
+    	    String distance = String.format("%.3f",userData[1]);
+    	    
+    	    UserSimpleResponse userResponse = new UserSimpleResponse(userFound, distance);
+    	    userResponse.setDistance(distance);
+    	    
+    	    return userResponse;
+    	}).collect(Collectors.toList());
+    	
+        return userResponseList;
     }
 
 }
