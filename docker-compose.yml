@@ -37,7 +37,7 @@ services:
     networks:
       - bookon-network
       
-  yuzermongoexpress:
+  servermongoexpress:
     image: mongo-express:latest
     container_name: servermongoexpress
     hostname: servermongoexpress
