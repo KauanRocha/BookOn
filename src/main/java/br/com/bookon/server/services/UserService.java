@@ -131,7 +131,8 @@ public class UserService {
     	    userResponse.setDistance(distance);
     	    
     	    return userResponse;
-    	}).collect(Collectors.toList());
+    	}).filter(userResponse -> userResponse.getBooks().size() >= 1)
+    			.collect(Collectors.toList());
     	
         return userResponseList;
     }

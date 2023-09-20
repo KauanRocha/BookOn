@@ -19,5 +19,4 @@ public class GeolocationService {
         String url = geocodingApiUrl + "?address=" + address + "&key=" + apiKey;
             return restTemplate.getForObject(url, GeolocationResponse.class);
         }
-    
 }
