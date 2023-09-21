@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 
 import java.io.Serializable;
 
+import br.com.bookon.server.enumerations.BookCategoryEnum;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,7 +26,7 @@ public class Book implements Serializable {
 
 	private String title;
 	private String author;
-	private String category;
+	private BookCategoryEnum category;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id") 
@@ -58,11 +59,11 @@ public class Book implements Serializable {
 		this.author = author;
 	}
 
-	public String getCategory() {
+	public BookCategoryEnum getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(BookCategoryEnum category) {
 		this.category = category;
 	}
 	
@@ -74,7 +75,7 @@ public class Book implements Serializable {
 		this.user = user;
 	}
 
-	public Book(Long id, String title, String author, String category, User user) {
+	public Book(Long id, String title, String author, BookCategoryEnum category, User user) {
 		super();
 		this.id = id;
 		this.title = title;
