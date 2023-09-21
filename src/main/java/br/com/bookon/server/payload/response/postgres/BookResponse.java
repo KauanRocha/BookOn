@@ -1,5 +1,6 @@
 package br.com.bookon.server.payload.response.postgres;
 
+import br.com.bookon.server.enumerations.BookCategoryEnum;
 import br.com.bookon.server.models.postgres.Book;
 
 public class BookResponse {
@@ -17,7 +18,7 @@ public class BookResponse {
 	        return book.getAuthor();
 	    }
 
-	    public String getBookCathegory() {
+	    public BookCategoryEnum getBookCathegory() {
 	        return book.getCategory();
 	    }
 

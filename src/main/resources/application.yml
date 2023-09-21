@@ -8,7 +8,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:15432/bookon
+    url: jdbc:postgresql://localhost:5432/bookon
     username: server
     password: server
   jpa:

@@ -3,7 +3,7 @@ version: "3.8"
 services:
 
   serverpostgresql:
-    image: postgres:latest
+    image: postgres:15
     container_name: serverpostgresql
     hostname: serverpostgresql
     restart: unless-stopped
@@ -14,7 +14,7 @@ services:
     volumes:
       - ./data/postgresql:/var/lib/postgresql/data 
     ports:
-      - "15432:5432"
+      - "5432:5432"
     networks:
       - bookon-network
 
