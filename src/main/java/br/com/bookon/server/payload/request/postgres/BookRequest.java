@@ -1,18 +1,23 @@
 package br.com.bookon.server.payload.request.postgres;
 
+import br.com.bookon.server.enumerations.BookCategoryEnum;
 import br.com.bookon.server.models.postgres.Book;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class BookRequest {
 
-    @NotBlank
+	@NotBlank(message="{fieldName}-is-mandatory")
+    @NotNull
     private String title;
 
-    @NotBlank
+	@NotBlank(message="{fieldName}-is-mandatory")
+    @NotNull
     private String author;
 
-    @NotBlank
-    private String category;
+	@NotBlank(message="{fieldName}-is-mandatory")
+    @NotNull
+    private BookCategoryEnum category;
 
 
     public String getTitle() {
@@ -35,12 +40,12 @@ public class BookRequest {
 	}
 
 
-	public String getCategory() {
+	public BookCategoryEnum getCategory() {
 		return category;
 	}
 
 
-	public void setCategory(String category) {
+	public void setCategory(BookCategoryEnum category) {
 		this.category = category;
 	}
 

@@ -76,8 +76,8 @@ public class UserService {
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
         user.setRoles(strRolesForEnum(signUpRequest.getRole()));
-        user.setLatitude(geolocation(signUpRequest.getAddress()).getResults().get(0).getGeometry().getLocation().getLat());
-        user.setLongitude(geolocation(signUpRequest.getAddress()).getResults().get(0).getGeometry().getLocation().getLng());
+        user.setLatitude(signUpRequest.getLatitude());
+        user.setLongitude(signUpRequest.getLongitude());
         
         userRepository.save(user);
 

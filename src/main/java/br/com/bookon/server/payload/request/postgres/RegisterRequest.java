@@ -4,26 +4,35 @@ import java.util.Set;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class RegisterRequest {
-    @NotBlank
-    @Size(min = 3, max = 20)
+	
+    @NotBlank(message="{fieldName}-is-mandatory")
+    @NotNull
     private String username;
 
-    @NotBlank
-    @Size(min = 6, max = 40)
+    @NotBlank(message="{fieldName}-is-mandatory")
+    @NotNull
+    @Size(min = 6, max = 40, message="{fieldName}-must-have-between-{min}-and-{max}-characters")
     private String password;
 
-    @NotBlank
-    @Size(max = 50)
+    @NotBlank(message="{fieldName}-is-mandatory")
+    @NotNull
     @Email
     private String email;
 
     private Set<String> role;
     
-    private AddressResquest address;
-
+    @NotBlank(message="{fieldName}-is-mandatory")
+    @NotNull
+    private Double longitude; 
+    
+    @NotBlank(message="{fieldName}-is-mandatory")
+    @NotNull
+    private Double latitude;
+    
     public String getUsername() {
         return username;
     }
@@ -55,12 +64,21 @@ public class RegisterRequest {
     public void setRole(Set<String> role) {
         this.role = role;
     }
-    
-    public AddressResquest getAddress() {
-        return address;
-    }
 
-    public void setAddress(AddressResquest address) {
-        this.address = address;
-    }
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+
 }
