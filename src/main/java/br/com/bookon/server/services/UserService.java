@@ -18,7 +18,7 @@ import br.com.bookon.server.payload.request.postgres.FilterRequest;
 import br.com.bookon.server.payload.request.postgres.RegisterRequest;
 import br.com.bookon.server.payload.response.postgres.MessageResponse;
 import br.com.bookon.server.payload.response.postgres.NominatimAdressResponse.AddressParts;
-import br.com.bookon.server.payload.response.postgres.NominatimGeolocationResponse;
+import br.com.bookon.server.payload.response.postgres.NominatimGeolocationResponse.Place;
 import br.com.bookon.server.payload.response.simple.postgres.UserSimpleResponse;
 import br.com.bookon.server.repository.postgres.RoleRepository;
 import br.com.bookon.server.repository.postgres.UserRepository;
@@ -126,15 +126,6 @@ public class UserService {
     	
     	if (signUpRequest.isGeolocationFromNatigator()) {
     		
-    		System.out.println("aqui" + geolocationService.getCityStateCountry(
-        			signUpRequest.getLatitude(), signUpRequest.getLongitude()));
-    		
-    		System.out.println("aqui getAddressparts  ->" + geolocationService.getCityStateCountry(
-        			signUpRequest.getLatitude(), signUpRequest.getLongitude()).getAddressparts());
-    		
-    		System.out.println("aqui getResult  ->" + geolocationService.getCityStateCountry(
-        			signUpRequest.getLatitude(), signUpRequest.getLongitude()).getResult());
-    		
         	AddressParts address = geolocationService.getCityStateCountry(
         			signUpRequest.getLatitude(), signUpRequest.getLongitude())
         			.getAddressparts();
@@ -145,16 +136,22 @@ public class UserService {
             user.setState(address.getState());
             return user;
         }
+		
+		System.out.println("aqui place" + geolocationService.geocodeAddress(
+        		signUpRequest.getAddress()).getPlace());
+		
+		System.out.println("aqui full resonse  ->" + geolocationService.geocodeAddress(
+        		signUpRequest.getAddress()));
     	
-        NominatimGeolocationResponse geolocation = geolocationService.geocodeAddress(
-            		signUpRequest.getAddress());
+        Place geolocation = geolocationService.geocodeAddress(
+            		signUpRequest.getAddress()).getPlace();
         AddressParts address = geolocationService.getCityStateCountry(
         		geolocation.getLatitude(), geolocation.getLongitude())
         		.getAddressparts();
     	
     	user.setLatitude(geolocation.getLatitude());
         user.setLongitude(geolocation.getLongitude());
-        user.setCity(address.getCity());
+        user.setCity(address.getCity() != null ? address.getCity() : address.getTown());
         user.setState(address.getState());
         return user;
     }

@@ -19,6 +19,7 @@ public class GeolocationService {
 
     public NominatimAdressResponse getCityStateCountry(double latitude, double longitude) {
         String url = NOMINATIM_URL_REVERCE + "?format=xml&lat=" + latitude + "&lon=" + longitude;
+        System.out.println(url);
         ResponseEntity<NominatimAdressResponse> response = restTemplate.getForEntity(url, NominatimAdressResponse.class);
 
         if (response.getStatusCode().is2xxSuccessful()) {
@@ -30,11 +31,22 @@ public class GeolocationService {
         }
 
 
-    }
+    };
     
     public NominatimGeolocationResponse geocodeAddress(String address) {
-        String url = NOMINATIM_URL_SEARCH + "?format=geojson&q=" + address;
-        return restTemplate.getForObject(url, NominatimGeolocationResponse.class);
+        String url = NOMINATIM_URL_SEARCH + "?q=" + address + "&format=xml&polygon_kml=1&addressdetails";
+        System.out.println(url);
+        ResponseEntity<NominatimGeolocationResponse> response = restTemplate.getForEntity(url, NominatimGeolocationResponse.class);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return response.getBody();
+        } else {
+        	
+            System.err.println("Erro na solicitação: Código de status " + response.getStatusCode());
+            return null;
+        }
+
+
     }
     
 }

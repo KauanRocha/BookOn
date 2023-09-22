@@ -1,67 +1,120 @@
 package br.com.bookon.server.payload.response.postgres;
 
-import java.util.List;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
+@XmlRootElement(name = "searchresults")
+@XmlType(propOrder = { "place", "timestamp", "attribution", "querystring", "more_url", "exclude_place_ids" })
 public class NominatimGeolocationResponse {
-    private String type;
-    private Properties properties;
-    private double[] bbox;
-    private Geometry geometry;
+    private String timestamp;
+    private String attribution;
+    private String querystring;
+    private String more_url;
+    private String exclude_place_ids;
+    private Place place;
 
-    // Getters e Setters
-    public String getType() {
-        return type;
+    @XmlElement
+    public String getTimestamp() {
+        return timestamp;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
-    public Properties getProperties() {
-        return properties;
+    @XmlElement
+    public String getAttribution() {
+        return attribution;
     }
 
-    public void setProperties(Properties properties) {
-        this.properties = properties;
+    public void setAttribution(String attribution) {
+        this.attribution = attribution;
     }
 
-    public double[] getBbox() {
-        return bbox;
+    @XmlElement
+    public String getQuerystring() {
+        return querystring;
     }
 
-    public void setBbox(double[] bbox) {
-        this.bbox = bbox;
+    public void setQuerystring(String querystring) {
+        this.querystring = querystring;
     }
 
-    public Geometry getGeometry() {
-        return geometry;
+    @XmlElement
+    public String getMore_url() {
+        return more_url;
     }
 
-    public void setGeometry(Geometry geometry) {
-        this.geometry = geometry;
+    public void setMore_url(String more_url) {
+        this.more_url = more_url;
     }
 
-public class Properties {
-    private long place_id;
+    @XmlElement(name = "exclude_place_ids")
+    public String getExclude_place_ids() {
+        return exclude_place_ids;
+    }
+
+    public void setExclude_place_ids(String exclude_place_ids) {
+        this.exclude_place_ids = exclude_place_ids;
+    }
+
+    @XmlElement
+    public Place getPlace() {
+        return place;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
+    }
+
+    @Override
+    public String toString() {
+        return "SearchResults [timestamp=" + timestamp + ", attribution=" + attribution + ", querystring=" + querystring
+                + ", more_url=" + more_url + ", exclude_place_ids=" + exclude_place_ids + ", place=" + place + "]";
+    }
+
+@XmlType(propOrder = { "place_id", "osm_type", "osm_id", "lat", "lon", "boundingbox", "place_rank", "address_rank",
+        "display_name", "class", "type", "importance", "geokml", "house_number", "road", "hamlet", "town", "village",
+        "city", "ISO3166-2-lvl8", "state_district", "state", "ISO3166-2-lvl4", "postcode", "country", "country_code" })
+public class Place {
+    private String place_id;
     private String osm_type;
-    private long osm_id;
-    private int place_rank;
-    private String category;
-    private String type;
-    private double importance;
-    private String addresstype;
-    private String name;
+    private String osm_id;
+    private String lat;
+    private String lon;
+    private String boundingbox;
+    private String place_rank;
+    private String address_rank;
     private String display_name;
+    private String classValue;
+    private String type;
+    private String importance;
+    private String geokml;
+    private String house_number;
+    private String road;
+    private String hamlet;
+    private String town;
+    private String village;
+    private String city;
+    private String ISO3166_2_lvl8;
+    private String state_district;
+    private String state;
+    private String ISO3166_2_lvl4;
+    private String postcode;
+    private String country;
+    private String country_code;
 
-    // Getters e Setters
-    public long getPlace_id() {
+    @XmlElement(name = "place_id")
+    public String getPlace_id() {
         return place_id;
     }
 
-    public void setPlace_id(long place_id) {
+    public void setPlace_id(String place_id) {
         this.place_id = place_id;
     }
 
+    @XmlElement(name = "osm_type")
     public String getOsm_type() {
         return osm_type;
     }
@@ -70,62 +123,61 @@ public class Properties {
         this.osm_type = osm_type;
     }
 
-    public long getOsm_id() {
+    @XmlElement(name = "osm_id")
+    public String getOsm_id() {
         return osm_id;
     }
 
-    public void setOsm_id(long osm_id) {
+    public void setOsm_id(String osm_id) {
         this.osm_id = osm_id;
     }
 
-    public int getPlace_rank() {
+    @XmlElement
+    public Double getLatitude() {
+        return Double.parseDouble(lat);
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    @XmlElement
+    public Double getLongitude() {
+        return Double.parseDouble(lon);
+    }
+
+    public void setLon(String lon) {
+        this.lon = lon;
+    }
+
+    @XmlElement
+    public String getBoundingbox() {
+        return boundingbox;
+    }
+
+    public void setBoundingbox(String boundingbox) {
+        this.boundingbox = boundingbox;
+    }
+
+    @XmlElement(name = "place_rank")
+    public String getPlace_rank() {
         return place_rank;
     }
 
-    public void setPlace_rank(int place_rank) {
+    public void setPlace_rank(String place_rank) {
         this.place_rank = place_rank;
     }
 
-    public String getCategory() {
-        return category;
+    @XmlElement(name = "address_rank")
+    public String getAddress_rank() {
+        return address_rank;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setAddress_rank(String address_rank) {
+        this.address_rank = address_rank;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public double getImportance() {
-        return importance;
-    }
-
-    public void setImportance(double importance) {
-        this.importance = importance;
-    }
-
-    public String getAddresstype() {
-        return addresstype;
-    }
-
-    public void setAddresstype(String addresstype) {
-        this.addresstype = addresstype;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    @XmlElement(name = "display_name")
     public String getDisplay_name() {
         return display_name;
     }
@@ -133,12 +185,17 @@ public class Properties {
     public void setDisplay_name(String display_name) {
         this.display_name = display_name;
     }
-}
 
-public class Geometry {
-    private String type;
-    private double[] coordinates;
+    @XmlElement(name = "class")
+    public String getClassValue() {
+        return classValue;
+    }
 
+    public void setClassValue(String classValue) {
+        this.classValue = classValue;
+    }
+
+    @XmlElement
     public String getType() {
         return type;
     }
@@ -147,42 +204,151 @@ public class Geometry {
         this.type = type;
     }
 
-    public double[] getCoordinates() {
-        return coordinates;
+    @XmlElement
+    public String getImportance() {
+        return importance;
     }
 
-    public void setCoordinates(double[] coordinates) {
-        this.coordinates = coordinates;
-    }
-}
-
-public class FeatureCollection {
-    private String type;
-    private String licence;
-    private List<NominatimGeolocationResponse> features;
-
-    public String getType() {
-        return type;
+    public void setImportance(String importance) {
+        this.importance = importance;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    @XmlElement
+    public String getGeokml() {
+        return geokml;
     }
 
-    public String getLicence() {
-        return licence;
+    public void setGeokml(String geokml) {
+        this.geokml = geokml;
     }
 
-    public void setLicence(String licence) {
-        this.licence = licence;
+    @XmlElement(name = "house_number")
+    public String getHouse_number() {
+        return house_number;
     }
 
-    public List<NominatimGeolocationResponse> getFeatures() {
-        return features;
+    public void setHouse_number(String house_number) {
+        this.house_number = house_number;
     }
 
-    public void setFeatures(List<NominatimGeolocationResponse> features) {
-        this.features = features;
+    @XmlElement
+    public String getRoad() {
+        return road;
+    }
+
+    public void setRoad(String road) {
+        this.road = road;
+    }
+
+    @XmlElement
+    public String getHamlet() {
+        return hamlet;
+    }
+
+    public void setHamlet(String hamlet) {
+        this.hamlet = hamlet;
+    }
+
+    @XmlElement
+    public String getTown() {
+        return town;
+    }
+
+    public void setTown(String town) {
+        this.town = town;
+    }
+
+    @XmlElement
+    public String getVillage() {
+        return village;
+    }
+
+    public void setVillage(String village) {
+        this.village = village;
+    }
+
+    @XmlElement
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @XmlElement(name = "ISO3166-2-lvl8")
+    public String getISO3166_2_lvl8() {
+        return ISO3166_2_lvl8;
+    }
+
+    public void setISO3166_2_lvl8(String ISO3166_2_lvl8) {
+        this.ISO3166_2_lvl8 = ISO3166_2_lvl8;
+    }
+
+    @XmlElement(name = "state_district")
+    public String getState_district() {
+        return state_district;
+    }
+
+    public void setState_district(String state_district) {
+        this.state_district = state_district;
+    }
+
+    @XmlElement
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    @XmlElement(name = "ISO3166-2-lvl4")
+    public String getISO3166_2_lvl4() {
+        return ISO3166_2_lvl4;
+    }
+
+    public void setISO3166_2_lvl4(String ISO3166_2_lvl4) {
+        this.ISO3166_2_lvl4 = ISO3166_2_lvl4;
+    }
+
+    @XmlElement
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    @XmlElement
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    @XmlElement(name = "country_code")
+    public String getCountry_code() {
+        return country_code;
+    }
+
+    public void setCountry_code(String country_code) {
+        this.country_code = country_code;
+    }
+
+    @Override
+    public String toString() {
+        return "Place [place_id=" + place_id + ", osm_type=" + osm_type + ", osm_id=" + osm_id + ", lat=" + lat
+                + ", lon=" + lon + ", boundingbox=" + boundingbox + ", place_rank=" + place_rank + ", address_rank="
+                + address_rank + ", display_name=" + display_name + ", classValue=" + classValue + ", type=" + type
+                + ", importance=" + importance + ", geokml=" + geokml + ", house_number=" + house_number + ", road="
+                + road + ", hamlet=" + hamlet + ", town=" + town + ", village=" + village + ", city=" + city
+                + ", ISO3166_2_lvl8=" + ISO3166_2_lvl8 + ", state_district=" + state_district + ", state=" + state
+                + ", ISO3166_2_lvl4=" + ISO3166_2_lvl4 + ", postcode=" + postcode + ", country=" + country
+                + ", country_code=" + country_code + "]";
     }
 }
 }
