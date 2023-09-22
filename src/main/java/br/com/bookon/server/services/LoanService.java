@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.bookon.server.enumerations.LoanStatusEnum;
+import br.com.bookon.server.models.mongo.BookMongo;
 import br.com.bookon.server.models.mongo.Loan;
+import br.com.bookon.server.models.mongo.UserMongo;
 import br.com.bookon.server.models.postgres.Book;
 import br.com.bookon.server.models.postgres.User;
 import br.com.bookon.server.payload.request.mongo.LoanRequest;
@@ -48,15 +50,15 @@ public class LoanService {
     public LoanResponse createLoan(LoanRequest loanRequest) {
     	Loan loan = new Loan();
         User borrowerPostgres = userRepository.findById(loanRequest.getBorrowerId()).orElseThrow(null);
-        br.com.bookon.server.models.mongo.User borrower = new br.com.bookon.server.models.mongo.User(borrowerPostgres);
+        UserMongo borrower = new UserMongo(borrowerPostgres);
         loan.setBorrowerUser(borrower);
         
         User lenderPostgres = userRepository.findById(loanRequest.getLenderId()).orElseThrow(null);
-        br.com.bookon.server.models.mongo.User lender = new br.com.bookon.server.models.mongo.User(lenderPostgres);
+        UserMongo lender = new UserMongo(lenderPostgres);
         loan.setLenderUser(lender);
         
         Book bookPostgres = bookRepository.findById(loanRequest.getBookId()).orElseThrow(null);
-        br.com.bookon.server.models.mongo.Book book = new br.com.bookon.server.models.mongo.Book(bookPostgres);
+        BookMongo book = new BookMongo(bookPostgres);
         loan.setBook(book);
         loan.setReturnDate(null);
         
@@ -75,15 +77,15 @@ public class LoanService {
     public LoanResponse createPropose(LoanRequest loanRequest, Integer borrowerId) {
     	Loan loan = new Loan();
         User borrowerPostgres = userRepository.findById(borrowerId).orElseThrow(null);
-        br.com.bookon.server.models.mongo.User borrower = new br.com.bookon.server.models.mongo.User(borrowerPostgres);
+        UserMongo borrower = new UserMongo(borrowerPostgres);
         loan.setBorrowerUser(borrower);
         
         User lenderPostgres = userRepository.findById(loanRequest.getLenderId()).orElseThrow(null);
-        br.com.bookon.server.models.mongo.User lender = new br.com.bookon.server.models.mongo.User(lenderPostgres);
+        UserMongo lender = new UserMongo(lenderPostgres);
         loan.setLenderUser(lender);
         
         Book bookPostgres = bookRepository.findById(loanRequest.getBookId()).orElseThrow(null);
-        br.com.bookon.server.models.mongo.Book book = new br.com.bookon.server.models.mongo.Book(bookPostgres);
+        BookMongo book = new BookMongo(bookPostgres);
         loan.setBook(book);
         loan.setReturnDate(null);
         loan.setStatus(LoanStatusEnum.PENDING);
