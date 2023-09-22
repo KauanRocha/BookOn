@@ -32,9 +32,9 @@ public class GeolocationService {
 
     }
     
-    public NominatimGeolocationResponse[] geocodeAddress(String address) {
+    public NominatimGeolocationResponse geocodeAddress(String address) {
         String url = NOMINATIM_URL_SEARCH + "?format=geojson&q=" + address;
-        return restTemplate.getForObject(url, NominatimGeolocationResponse[].class);
+        return restTemplate.getForObject(url, NominatimGeolocationResponse.class);
     }
     
 }
