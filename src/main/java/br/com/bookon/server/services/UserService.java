@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 import br.com.bookon.server.enumerations.RoleEnum;
 import br.com.bookon.server.models.postgres.Role;
 import br.com.bookon.server.models.postgres.User;
-import br.com.bookon.server.payload.request.postgres.AddressResquest;
 import br.com.bookon.server.payload.request.postgres.FilterRequest;
 import br.com.bookon.server.payload.request.postgres.RegisterRequest;
-import br.com.bookon.server.payload.response.postgres.GeolocationResponse;
 import br.com.bookon.server.payload.response.postgres.MessageResponse;
+import br.com.bookon.server.payload.response.postgres.NominatimAdressResponse.AddressParts;
+import br.com.bookon.server.payload.response.postgres.NominatimGeolocationResponse;
 import br.com.bookon.server.payload.response.simple.postgres.UserSimpleResponse;
 import br.com.bookon.server.repository.postgres.RoleRepository;
 import br.com.bookon.server.repository.postgres.UserRepository;
@@ -45,19 +45,6 @@ public class UserService {
         return userRepository.findAll(spec.search(filterRequest, User.class), filterRequest.build());
     }
     
-    public GeolocationResponse geolocation(AddressResquest address) {
-        
-        String formattedAddress = (address.getStreet() + " " +
-                address.getNumber() + " " +
-                address.getCity() + " " +
-                address.getState() + " " +
-                address.getCountry() + " " +
-                address.getPostalCode())
-                .replaceAll("\\s+", "+");
-        
-        return geolocationService.getGeolocation(formattedAddress);
-    }
-    
     public ResponseEntity<?> register(RegisterRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
@@ -76,9 +63,8 @@ public class UserService {
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
         user.setRoles(strRolesForEnum(signUpRequest.getRole()));
-        user.setLatitude(signUpRequest.getLatitude());
-        user.setLongitude(signUpRequest.getLongitude());
         
+        populateAddressValues(user, signUpRequest);
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
@@ -135,6 +121,42 @@ public class UserService {
     			.collect(Collectors.toList());
     	
         return userResponseList;
+    }
+    private User populateAddressValues(User user, RegisterRequest signUpRequest) {
+    	
+    	if (signUpRequest.isGeolocationFromNatigator()) {
+    		
+    		System.out.println("aqui" + geolocationService.getCityStateCountry(
+        			signUpRequest.getLatitude(), signUpRequest.getLongitude()));
+    		
+    		System.out.println("aqui getAddressparts  ->" + geolocationService.getCityStateCountry(
+        			signUpRequest.getLatitude(), signUpRequest.getLongitude()).getAddressparts());
+    		
+    		System.out.println("aqui getResult  ->" + geolocationService.getCityStateCountry(
+        			signUpRequest.getLatitude(), signUpRequest.getLongitude()).getResult());
+    		
+        	AddressParts address = geolocationService.getCityStateCountry(
+        			signUpRequest.getLatitude(), signUpRequest.getLongitude())
+        			.getAddressparts();
+        	
+        	user.setLatitude(signUpRequest.getLatitude());
+            user.setLongitude(signUpRequest.getLongitude());
+            user.setCity(address.getCity() != null ? address.getCity() : address.getTown());
+            user.setState(address.getState());
+            return user;
+        }
+    	
+        NominatimGeolocationResponse geolocation = geolocationService.geocodeAddress(
+            		signUpRequest.getAddress());
+        AddressParts address = geolocationService.getCityStateCountry(
+        		geolocation.getLatitude(), geolocation.getLongitude())
+        		.getAddressparts();
+    	
+    	user.setLatitude(geolocation.getLatitude());
+        user.setLongitude(geolocation.getLongitude());
+        user.setCity(address.getCity());
+        user.setState(address.getState());
+        return user;
     }
 
 }
