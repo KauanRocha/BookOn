@@ -2,12 +2,7 @@ package br.com.bookon.server.payload.response.postgres;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class NominatimGeolocationResponse {
-	
     private String type;
     private Properties properties;
     private double[] bbox;
@@ -45,7 +40,6 @@ public class NominatimGeolocationResponse {
     public void setGeometry(Geometry geometry) {
         this.geometry = geometry;
     }
-}
 
 public class Properties {
     private long place_id;
@@ -145,7 +139,6 @@ public class Geometry {
     private String type;
     private double[] coordinates;
 
-    // Getters e Setters
     public String getType() {
         return type;
     }
@@ -166,9 +159,8 @@ public class Geometry {
 public class FeatureCollection {
     private String type;
     private String licence;
-    private List<Feature> features;
+    private List<NominatimGeolocationResponse> features;
 
-    // Getters e Setters
     public String getType() {
         return type;
     }
@@ -185,11 +177,12 @@ public class FeatureCollection {
         this.licence = licence;
     }
 
-    public List<Feature> getFeatures() {
+    public List<NominatimGeolocationResponse> getFeatures() {
         return features;
     }
 
-    public void setFeatures(List<Feature> features) {
+    public void setFeatures(List<NominatimGeolocationResponse> features) {
         this.features = features;
     }
+}
 }
