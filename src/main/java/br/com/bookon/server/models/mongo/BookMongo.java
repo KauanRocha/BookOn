@@ -1,6 +1,6 @@
 package br.com.bookon.server.models.mongo;
 
-public class Book {
+public class BookMongo {
 
 	private Long id;
 	private String title;
@@ -18,12 +18,12 @@ public class Book {
 		this.title = title;
 	}
 
-	public Book(br.com.bookon.server.models.postgres.Book book) {
+	public BookMongo(br.com.bookon.server.models.postgres.Book book) {
 		this.id = book.getId();
 		this.title = book.getTitle();
 	}
 	
-	public Book() {
+	public BookMongo() {
 	}
 	
 }

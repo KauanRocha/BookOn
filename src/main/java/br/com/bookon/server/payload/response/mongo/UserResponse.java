@@ -1,10 +1,10 @@
 package br.com.bookon.server.payload.response.mongo;
 
-import br.com.bookon.server.models.mongo.User;
+import br.com.bookon.server.models.mongo.UserMongo;
 
 public class UserResponse {
 
-	private User user;
+	private UserMongo user;
 
 	public Integer getId() {
 		return user.getId();
@@ -14,7 +14,7 @@ public class UserResponse {
 		return user.getName();
 	}
 
-	public UserResponse(User user) {
+	public UserResponse(UserMongo user) {
 		this.user = user;
 	}
 	
