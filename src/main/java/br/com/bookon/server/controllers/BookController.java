@@ -2,6 +2,7 @@ package br.com.bookon.server.controllers;
 
 import br.com.bookon.server.models.postgres.Book;
 import br.com.bookon.server.payload.request.postgres.BookRequest;
+import br.com.bookon.server.payload.response.postgres.RegionWithBookRosponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,5 +45,12 @@ public class BookController {
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
     }
+    
+    @PostMapping("/{userId}/find")
+    public List<RegionWithBookRosponse> getBookByGeolocation(@PathVariable("userId") Integer userId){
+    	return bookService.findRegionsWithNearbyBooks(userId);
+    }
+    
+    
 
 }

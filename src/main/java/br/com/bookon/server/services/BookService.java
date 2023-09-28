@@ -4,6 +4,8 @@ import br.com.bookon.server.models.postgres.Book;
 import br.com.bookon.server.models.postgres.User;
 import br.com.bookon.server.payload.request.postgres.BookRequest;
 import br.com.bookon.server.payload.response.postgres.BookResponse;
+import br.com.bookon.server.payload.response.postgres.RegionWithBookRosponse;
+import br.com.bookon.server.payload.response.postgres.RegionWithUsersRosponse;
 import br.com.bookon.server.repository.postgres.BookRepository;
 import br.com.bookon.server.repository.postgres.UserRepository;
 
@@ -24,6 +26,10 @@ public class BookService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private UserService userService;
+    
 
     public ResponseEntity<?> createBook(BookRequest bookRequest, Integer userId){
 
@@ -64,6 +70,15 @@ public class BookService {
     public void deleteBook(Long id) {
         Book existingBook = getBookById(id);
         bookRepository.delete(existingBook);
+    }
+    
+    public List<RegionWithBookRosponse> findRegionsWithNearbyBooks(Integer userFinderId) {
+    	List<RegionWithUsersRosponse> regionsWithUsers = userService.findRegionsWithNearbyUsers(userFinderId);
+        List<RegionWithBookRosponse> regionsWithBooks = regionsWithUsers.stream()
+            .map(RegionWithUsersRosponse::toRegionWithBookRosponse)
+            .collect(Collectors.toList());
+    	
+    	return regionsWithBooks;
     }
     
 }

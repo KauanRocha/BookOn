@@ -21,10 +21,11 @@ public interface UserRepository extends PagingAndSortingRepository<User, Integer
 
     Boolean existsByEmail(String email);
     
-    @Query(value = "SELECT u.id, " +
-            "(6371 * acos(cos(radians(:userLatitude)) * cos(radians(u.latitude)) * cos(radians(:userLongitude - u.longitude)) + sin(radians(:userLatitude)) * sin(radians(u.latitude)))) AS distancia " +
+    @Query(value = "SELECT u.*, " +
+            "(6371 * acos(cos(radians(:userLatitude)) * cos(radians(u.latitude)) * cos(radians(:userLongitude - u.longitude)) + sin(radians(:userLatitude)) * sin(radians(u.latitude)))) AS distance " +
             "FROM users u " +
-            "WHERE u.id <> :userId AND (6371 * acos(cos(radians(:userLatitude)) * cos(radians(u.latitude)) * cos(radians(:userLongitude - u.longitude)) + sin(radians(:userLatitude)) * sin(radians(u.latitude)))) <= 15", nativeQuery = true)
-    List<Object[]> findIdsAndDistancesOfNearbyUsers(@Param("userId") Integer userId, @Param("userLatitude") double userLatitude, @Param("userLongitude") double userLongitude);
-
+            "WHERE u.id <> :userId AND (6371 * acos(cos(radians(:userLatitude)) * cos(radians(u.latitude)) * cos(radians(:userLongitude - u.longitude)) + sin(radians(:userLatitude)) * sin(radians(u.latitude)))) <= :maxDistance " +
+            "ORDER BY (6371 * acos(cos(radians(:userLatitude)) * cos(radians(u.latitude)) * cos(radians(:userLongitude - u.longitude)) + sin(radians(:userLatitude)) * sin(radians(u.latitude)))) ASC", nativeQuery = true)
+    List<User> findNearbyUsersOrderByDistance(@Param("userId") Integer userId, @Param("userLatitude") double userLatitude, @Param("userLongitude") double userLongitude, @Param("maxDistance") Integer maxDistance);
+    
 }
