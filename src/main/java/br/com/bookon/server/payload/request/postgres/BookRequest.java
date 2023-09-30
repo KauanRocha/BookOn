@@ -15,7 +15,6 @@ public class BookRequest {
     @NotNull
     private String author;
 
-	@NotBlank(message="{fieldName}-is-mandatory")
     @NotNull
     private BookCategoryEnum category;
 

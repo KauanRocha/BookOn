@@ -14,13 +14,13 @@ public class Loan {
     private String id;
     
     @Field("borrowerUser")
-    private User borrowerUser;
+    private UserMongo borrowerUser;
 
     @Field("lenderUser")
-    private User lenderUser;
+    private UserMongo lenderUser;
 
     @Field("book")
-    private Book book;
+    private BookMongo book;
     
     @Field("status")
     private LoanStatusEnum status;
@@ -38,27 +38,27 @@ public class Loan {
 		return id;
 	}
 
-	public User getBorrowerUser() {
+	public UserMongo getBorrowerUser() {
 		return borrowerUser;
 	}
 
-	public void setBorrowerUser(User borrowerUser) {
+	public void setBorrowerUser(UserMongo borrowerUser) {
 		this.borrowerUser = borrowerUser;
 	}
 
-	public User getLenderUser() {
+	public UserMongo getLenderUser() {
 		return lenderUser;
 	}
 
-	public void setLenderUser(User lenderUser) {
+	public void setLenderUser(UserMongo lenderUser) {
 		this.lenderUser = lenderUser;
 	}
 
-	public Book getBook() {
+	public BookMongo getBook() {
 		return book;
 	}
 
-	public void setBook(Book book) {
+	public void setBook(BookMongo book) {
 		this.book = book;
 	}
 
@@ -94,7 +94,7 @@ public class Loan {
 		this.createAt = createAt;
 	}
 
-	public Loan(String id, User borrowerUser, User lenderUser, Book book, LocalDateTime startDate,
+	public Loan(String id, UserMongo borrowerUser, UserMongo lenderUser, BookMongo book, LocalDateTime startDate,
 			LocalDateTime returnDate, LocalDateTime createAt, LoanStatusEnum status) {
 		super();
 		this.id = id;

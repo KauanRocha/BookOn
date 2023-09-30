@@ -25,13 +25,13 @@ public class RegisterRequest {
 
     private Set<String> role;
     
-    @NotBlank(message="{fieldName}-is-mandatory")
-    @NotNull
     private Double longitude; 
     
-    @NotBlank(message="{fieldName}-is-mandatory")
-    @NotNull
     private Double latitude;
+    
+    private String address;
+    
+    private boolean geolocationFromNatigator;
     
     public String getUsername() {
         return username;
@@ -79,6 +79,22 @@ public class RegisterRequest {
 
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public boolean isGeolocationFromNatigator() {
+		return geolocationFromNatigator;
+	}
+
+	public void setGeolocationFromNatigator(boolean geolocationFromNatigator) {
+		this.geolocationFromNatigator = geolocationFromNatigator;
 	}
 
 }

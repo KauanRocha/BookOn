@@ -1,6 +1,8 @@
 package br.com.bookon.server.models.mongo;
 
-public class User {
+import br.com.bookon.server.models.postgres.User;
+
+public class UserMongo {
 
 	private Integer id;
 	private String name;
@@ -18,13 +20,13 @@ public class User {
 		this.name = name;
 	}
 
-	public User(br.com.bookon.server.models.postgres.User user) {
+	public UserMongo(User user) {
 		this.id = user.getId();
 		this.name = user.getUsername();
 		
 	}
 	
-	public User() {
+	public UserMongo() {
 	}
 	
 }

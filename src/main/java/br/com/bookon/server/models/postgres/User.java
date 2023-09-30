@@ -46,6 +46,10 @@ public class User implements Serializable{
 
     private Double longitude;
     
+    private String city;
+
+    private String state;
+    
     @OneToMany(mappedBy = "user")
     private List<Book> books;
 
@@ -121,4 +125,21 @@ public class User implements Serializable{
 	public void setBooks(List<Book> books) {
 		this.books = books;
 	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+	
 }

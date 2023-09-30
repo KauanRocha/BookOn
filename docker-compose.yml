@@ -3,7 +3,7 @@ version: "3.8"
 services:
 
   serverpostgresql:
-    image: postgres:latest
+    image: postgres:15
     container_name: serverpostgresql
     hostname: serverpostgresql
     restart: unless-stopped
@@ -14,7 +14,7 @@ services:
     volumes:
       - ./data/postgresql:/var/lib/postgresql/data 
     ports:
-      - "15432:5432"
+      - "5432:5432"
     networks:
       - bookon-network
 
@@ -34,27 +34,6 @@ services:
       - ./docker/mongo:/docker-entrypoint-initdb.d
     ports:
       - "27017:27017"
-    networks:
-      - bookon-network
-      
-  servermongoexpress:
-    image: mongo-express:latest
-    container_name: servermongoexpress
-    hostname: servermongoexpress
-    restart: unless-stopped
-    ports:
-      - "18081:8081"
-    environment:
-      ME_CONFIG_MONGODB_ENABLE_ADMIN: "false"
-      ME_CONFIG_MONGODB_AUTH_DATABASE: bookon
-      ME_CONFIG_MONGODB_AUTH_USERNAME: server
-      ME_CONFIG_MONGODB_AUTH_PASSWORD: server
-      ME_CONFIG_MONGODB_SERVER: servermongo
-      ME_CONFIG_MONGODB_PORT: "27017"
-      ME_CONFIG_BASICAUTH_USERNAME: server
-      ME_CONFIG_BASICAUTH_PASSWORD: server
-    depends_on:
-      - servermongo
     networks:
       - bookon-network
 

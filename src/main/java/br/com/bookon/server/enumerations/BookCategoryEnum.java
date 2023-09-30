@@ -1,14 +1,14 @@
 package br.com.bookon.server.enumerations;
 
 public enum BookCategoryEnum {
-    ROMANCE,
-    FICCAO_CIENTIFICA,
-    MISTERIO,
-    FANTASIA,
-    NAO_FICCAO,
-    POESIA,
+	ROMANCE,
+    SCIENCE_FICTION,
+    MYSTERY,
+    FANTASY,
+    NON_FICTION,
+    POETRY,
     DRAMA,
-    HISTORIA,
-    AUTOAJUDA,
-    OUTRO;
+    HISTORY,
+    SELF_HELP,
+    OTHER;
 }

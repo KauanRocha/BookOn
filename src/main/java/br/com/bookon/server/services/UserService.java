@@ -1,5 +1,6 @@
 package br.com.bookon.server.services;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,12 +15,12 @@ import org.springframework.stereotype.Service;
 import br.com.bookon.server.enumerations.RoleEnum;
 import br.com.bookon.server.models.postgres.Role;
 import br.com.bookon.server.models.postgres.User;
-import br.com.bookon.server.payload.request.postgres.AddressResquest;
 import br.com.bookon.server.payload.request.postgres.FilterRequest;
 import br.com.bookon.server.payload.request.postgres.RegisterRequest;
-import br.com.bookon.server.payload.response.postgres.GeolocationResponse;
 import br.com.bookon.server.payload.response.postgres.MessageResponse;
-import br.com.bookon.server.payload.response.simple.postgres.UserSimpleResponse;
+import br.com.bookon.server.payload.response.postgres.RegionWithUsersRosponse;
+import br.com.bookon.server.payload.response.postgres.NominatimAdressResponse.AddressParts;
+import br.com.bookon.server.payload.response.postgres.NominatimGeolocationResponse.Place;
 import br.com.bookon.server.repository.postgres.RoleRepository;
 import br.com.bookon.server.repository.postgres.UserRepository;
 import br.com.bookon.server.specification.UserSpecification;
@@ -40,22 +41,13 @@ public class UserService {
     @Autowired
     private PasswordEncoder encoder;
     
+    private int RADIUS_EARTH = 6371;
+    
+    private Integer MAX_DISTANCE = 15;
+    
     public Page<User> list(FilterRequest filterRequest) {
         UserSpecification spec = new UserSpecification();
         return userRepository.findAll(spec.search(filterRequest, User.class), filterRequest.build());
-    }
-    
-    public GeolocationResponse geolocation(AddressResquest address) {
-        
-        String formattedAddress = (address.getStreet() + " " +
-                address.getNumber() + " " +
-                address.getCity() + " " +
-                address.getState() + " " +
-                address.getCountry() + " " +
-                address.getPostalCode())
-                .replaceAll("\\s+", "+");
-        
-        return geolocationService.getGeolocation(formattedAddress);
     }
     
     public ResponseEntity<?> register(RegisterRequest signUpRequest) {
@@ -76,9 +68,8 @@ public class UserService {
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
         user.setRoles(strRolesForEnum(signUpRequest.getRole()));
-        user.setLatitude(signUpRequest.getLatitude());
-        user.setLongitude(signUpRequest.getLongitude());
         
+        populateAddressValues(user, signUpRequest);
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
@@ -117,24 +108,77 @@ public class UserService {
         return roles;
     }
     
-    public List<UserSimpleResponse> getBookByLocation(Integer userId) {
-    	User userFinder = userRepository.findById(userId).orElse(null);
+    public List<RegionWithUsersRosponse> findRegionsWithNearbyUsers(Integer userFinderId) {
+    	User userFinder = userRepository.findById(userFinderId).orElse(null);
     	
-    	List<Object[]> nearbyUsers = userRepository.
-    			findIdsAndDistancesOfNearbyUsers(userId, userFinder.getLatitude(), userFinder.getLongitude());
+    	List<User> nearbyUsers = userRepository.findNearbyUsersOrderByDistance(
+    			userFinder.getId(), userFinder.getLatitude(), userFinder.getLongitude(), MAX_DISTANCE);
     	
-    	List<UserSimpleResponse> userResponseList = nearbyUsers.stream().map(userData -> {
-    	    User userFound = userRepository.findById((Integer) userData[0]).orElse(null);
-    	    String distance = String.format("%.3f",userData[1]);
-    	    
-    	    UserSimpleResponse userResponse = new UserSimpleResponse(userFound, distance);
-    	    userResponse.setDistance(distance);
-    	    
-    	    return userResponse;
-    	}).filter(userResponse -> userResponse.getBooks().size() >= 1)
-    			.collect(Collectors.toList());
+    	List<RegionWithUsersRosponse> listRegionWithUsers = new ArrayList<>();
     	
-        return userResponseList;
+    	 while (!nearbyUsers.isEmpty()) {
+    	        User closestUser = nearbyUsers.get(0);
+
+    	        List<User> usersInRegion = nearbyUsers.stream()
+    	            .filter(otherUser -> calculateDistance(closestUser, otherUser) <= 2)
+    	            .collect(Collectors.toList());
+    	        usersInRegion.add(closestUser);
+
+    	        nearbyUsers.removeAll(usersInRegion);
+
+    	        RegionWithUsersRosponse regionWithUsers = new RegionWithUsersRosponse();
+    	        regionWithUsers.setUsers(usersInRegion);
+    	        regionWithUsers.populateCoordinates();
+    	        
+    	        listRegionWithUsers.add(regionWithUsers);
+    	    }
+    	return listRegionWithUsers;
+
+    }
+    
+    private double calculateDistance(User closestUser, User otherUser ) {
+
+        double latitudeClosestUser = Math.toRadians(closestUser.getLatitude());
+        double longitudeClosestUser = Math.toRadians(closestUser.getLongitude());
+        double latitudeOtherUser = Math.toRadians(otherUser.getLatitude());
+        double longitudeOtherUser = Math.toRadians(otherUser.getLongitude());
+
+        double latituteDifference = latitudeOtherUser - latitudeClosestUser;
+        double longitudeDifference = longitudeOtherUser - longitudeClosestUser;
+
+        double a = Math.sin(latituteDifference / 2) * Math.sin(latituteDifference / 2)
+                + Math.cos(latitudeClosestUser) * Math.cos(latitudeOtherUser) * Math.sin(longitudeDifference / 2) * Math.sin(longitudeDifference / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return RADIUS_EARTH * c;
+    }
+    private User populateAddressValues(User user, RegisterRequest signUpRequest) {
+    	
+    	if (signUpRequest.isGeolocationFromNatigator()) {
+    		
+        	AddressParts address = geolocationService.getCityStateCountry(
+        			signUpRequest.getLatitude(), signUpRequest.getLongitude())
+        			.getAddressparts();
+        	
+        	user.setLatitude(signUpRequest.getLatitude());
+            user.setLongitude(signUpRequest.getLongitude());
+            user.setCity(address.getCity() != null ? address.getCity() : address.getTown());
+            user.setState(address.getState());
+            return user;
+        }
+		
+        Place geolocation = geolocationService.geocodeAddress(
+            		signUpRequest.getAddress()).getPlace();
+        AddressParts address = geolocationService.getCityStateCountry(
+        		geolocation.getLatitude(), geolocation.getLongitude())
+        		.getAddressparts();
+    	
+    	user.setLatitude(geolocation.getLatitude());
+        user.setLongitude(geolocation.getLongitude());
+        user.setCity(address.getCity() != null ? address.getCity() : address.getTown());
+        user.setState(address.getState());
+        return user;
     }
 
 }
