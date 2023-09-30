@@ -1,5 +1,6 @@
 package br.com.bookon.server.controllers;
 
+import br.com.bookon.server.annotations.UserId;
 import br.com.bookon.server.models.postgres.Book;
 import br.com.bookon.server.payload.request.postgres.BookRequest;
 import br.com.bookon.server.payload.response.postgres.RegionWithBookRosponse;
@@ -14,6 +15,7 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("api/books")
 public class BookController {
@@ -21,8 +23,8 @@ public class BookController {
 	@Autowired
     private BookService bookService;
 
-    @PostMapping("/{userId}")
-    public ResponseEntity<?> createBook(@Valid @RequestBody BookRequest bookRequest, @PathVariable("userId") Integer userId){
+    @PostMapping
+    public ResponseEntity<?> createBook(@Valid @RequestBody BookRequest bookRequest, @UserId Integer userId){
     	return bookService.createBook(bookRequest, userId);
     }
 
@@ -46,11 +48,15 @@ public class BookController {
         bookService.deleteBook(id);
     }
     
-    @PostMapping("/{userId}/find")
-    public List<RegionWithBookRosponse> getBookByGeolocation(@PathVariable("userId") Integer userId){
+    @PostMapping("/find")
+    public List<RegionWithBookRosponse> getBookByGeolocation(@UserId Integer userId){
     	return bookService.findRegionsWithNearbyBooks(userId);
     }
     
+    @PostMapping("/jtw")
+    public void createBook2(@UserId Integer userId){
+    	
+    	 System.out.println(userId);
+    }
     
-
 }
