@@ -5,9 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import br.com.bookon.server.annotations.UserId;
 import br.com.bookon.server.payload.request.mongo.LoanRequest;
 import br.com.bookon.server.payload.response.mongo.LoanResponse;
 import br.com.bookon.server.services.LoanService;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -34,12 +36,6 @@ public class LoanController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<LoanResponse> createLoan(@RequestBody LoanRequest loanRequest) {
-    	var createdLoan = loanService.createLoan(loanRequest);
-        return new ResponseEntity<>(createdLoan, HttpStatus.CREATED);
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLoan(@PathVariable String id) {
         boolean deleted = loanService.deleteLoan(id);
@@ -50,21 +46,21 @@ public class LoanController {
         }
     }
     
-    @PostMapping("/{borrowerId}/create")
-    public ResponseEntity<LoanResponse> createPropose(@RequestBody LoanRequest loanRequest, @PathVariable Integer borrowerId) {
+    @PostMapping("/create")
+    public ResponseEntity<LoanResponse> createPropose(@RequestBody @Valid LoanRequest loanRequest, @UserId Integer borrowerId) {
     	var createdLoan = loanService.createPropose(loanRequest, borrowerId);
         return new ResponseEntity<>(createdLoan, HttpStatus.CREATED);
     }
     
-    @GetMapping("/{lenderId}/search")
-    public ResponseEntity<List<LoanResponse>> listPropose(@PathVariable Integer lenderId) {
-    	List<LoanResponse> loans = loanService.listPropose(lenderId);
+    @GetMapping("search")
+    public ResponseEntity<List<LoanResponse>> listPropose(@UserId Integer lenderId) {
+    	List<LoanResponse> loans = loanService.listProposes(lenderId);
         return new ResponseEntity<>(loans, HttpStatus.OK);
     }
     
     @PutMapping("/{loanId}/approve")
-    public ResponseEntity<Void> approvePropose(@PathVariable String loanId) {
-    	loanService.approvePropose(loanId);
+    public ResponseEntity<Void> approvePropose(@PathVariable String loanId, @UserId Integer lenderUserId) {
+    	loanService.approvePropose(loanId, lenderUserId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

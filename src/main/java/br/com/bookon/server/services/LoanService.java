@@ -1,9 +1,14 @@
 package br.com.bookon.server.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import br.com.bookon.server.enumerations.LoanStatusEnum;
+import br.com.bookon.server.exceptions.NotFoundException;
 import br.com.bookon.server.models.mongo.BookMongo;
 import br.com.bookon.server.models.mongo.Loan;
 import br.com.bookon.server.models.mongo.UserMongo;
@@ -17,6 +22,7 @@ import br.com.bookon.server.repository.postgres.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LoanService {
@@ -29,6 +35,9 @@ public class LoanService {
     
     @Autowired
     private BookRepository bookRepository;
+    
+    @Autowired
+    private MongoTemplate mongoTemplate;
     
     public List<LoanResponse> getAllLoans() {
         List<Loan> loans = loanRepository.findAll();
@@ -47,24 +56,6 @@ public class LoanService {
         return new LoanResponse(loan);
     }
 
-    public LoanResponse createLoan(LoanRequest loanRequest) {
-    	Loan loan = new Loan();
-        User borrowerPostgres = userRepository.findById(loanRequest.getBorrowerId()).orElseThrow(null);
-        UserMongo borrower = new UserMongo(borrowerPostgres);
-        loan.setBorrowerUser(borrower);
-        
-        User lenderPostgres = userRepository.findById(loanRequest.getLenderId()).orElseThrow(null);
-        UserMongo lender = new UserMongo(lenderPostgres);
-        loan.setLenderUser(lender);
-        
-        Book bookPostgres = bookRepository.findById(loanRequest.getBookId()).orElseThrow(null);
-        BookMongo book = new BookMongo(bookPostgres);
-        loan.setBook(book);
-        loan.setReturnDate(null);
-        
-        return new LoanResponse(loanRepository.save(loan));
-    }
-
     public boolean deleteLoan(String id) {
         if (loanRepository.existsById(id)) {
             loanRepository.deleteById(id);
@@ -75,41 +66,48 @@ public class LoanService {
     }
     
     public LoanResponse createPropose(LoanRequest loanRequest, Integer borrowerId) {
-    	Loan loan = new Loan();
-        User borrowerPostgres = userRepository.findById(borrowerId).orElseThrow(null);
-        UserMongo borrower = new UserMongo(borrowerPostgres);
-        loan.setBorrowerUser(borrower);
+        User borrowerPostgres = userRepository.findById(borrowerId)
+        		.orElseThrow(() -> new NotFoundException("not-found-user-with-id: " + borrowerId));
         
-        User lenderPostgres = userRepository.findById(loanRequest.getLenderId()).orElseThrow(null);
-        UserMongo lender = new UserMongo(lenderPostgres);
-        loan.setLenderUser(lender);
+        User lenderPostgres = userRepository.findById(loanRequest.getLenderId())
+        		.orElseThrow(() -> new NotFoundException("not-found-user-with-id: " + loanRequest.getLenderId()));
         
-        Book bookPostgres = bookRepository.findById(loanRequest.getBookId()).orElseThrow(null);
-        BookMongo book = new BookMongo(bookPostgres);
-        loan.setBook(book);
+        Book bookPostgres = bookRepository.findById(loanRequest.getBookId())
+        		.orElseThrow(() -> new NotFoundException("not-found-book-with-id: " + loanRequest.getBookId()));
+        
+        var loan = new Loan();
+        loan.setBorrowerUser(new UserMongo(borrowerPostgres));
+        loan.setLenderUser(new UserMongo(lenderPostgres));
+        loan.setBook(new BookMongo(bookPostgres));
         loan.setReturnDate(null);
         loan.setStatus(LoanStatusEnum.PENDING);
         
         return new LoanResponse(loanRepository.save(loan));
     }
     
-    public List<LoanResponse> listPropose(Integer lenderId) {
+    public List<LoanResponse> listProposes(Integer lenderId) {
         List<Loan> loans = loanRepository.findByLenderUserIdAndStatus(lenderId, LoanStatusEnum.PENDING);
-        List<LoanResponse> loanResponses = new ArrayList<>();
-
-        for (Loan loan : loans) {
-            var loanResponse = new LoanResponse(loan);
-            loanResponses.add(loanResponse);
-        }
-
-        return loanResponses;
-    }
-    
-    public void approvePropose(String loanId) {
-        Loan loan = loanRepository.findById(loanId).orElse(null);
-        loan.setStatus(LoanStatusEnum.APPROVED);
-        loanRepository.save(loan);
         
+        return loans.stream()
+                .map(LoanResponse::new)
+                .collect(Collectors.toList());
     }
     
+    public void approvePropose(String loanId, Integer lenderUserId) {
+    	if (loanNotExists(loanId,lenderUserId)) {
+    		throw new NotFoundException("not-found-loan-with-lender-id: " + lenderUserId);
+    	}
+    	updateLoanStatusForApproved(loanId);
+    }
+    
+    private boolean loanNotExists(String loanId, Integer lenderUserId) {
+    	return !loanRepository.existsByIdAndLenderUserId(loanId, lenderUserId);
+    }
+    
+    private void updateLoanStatusForApproved(String loanId) {
+    	Query query = new Query(Criteria.where("_id").is(loanId));
+   	 	Update update = new Update().set("status", LoanStatusEnum.APPROVED);
+
+        mongoTemplate.updateFirst(query, update, Loan.class);
+    }
 }
