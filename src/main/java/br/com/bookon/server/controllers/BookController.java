@@ -3,6 +3,7 @@ package br.com.bookon.server.controllers;
 import br.com.bookon.server.annotations.UserId;
 import br.com.bookon.server.models.postgres.Book;
 import br.com.bookon.server.payload.request.postgres.BookRequest;
+import br.com.bookon.server.payload.response.postgres.BookResponse;
 import br.com.bookon.server.payload.response.postgres.RegionWithBookRosponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,39 +25,34 @@ public class BookController {
     private BookService bookService;
 
     @PostMapping
-    public ResponseEntity<?> createBook(@Valid @RequestBody BookRequest bookRequest, @UserId Integer userId){
-    	return bookService.createBook(bookRequest, userId);
+    public ResponseEntity<BookResponse> createBook(@UserId Integer userId, @Valid @RequestBody BookRequest bookRequest){
+    	return new ResponseEntity<>(bookService.createBook(bookRequest, userId), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<?>> getAllBooks() {
-        return bookService.getAllBooks();
+    public ResponseEntity<List<BookResponse>> getAllBooks() {
+        return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getBookById(@PathVariable Long id) {
-    	return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBooks());
+    public ResponseEntity<List<BookResponse>> getBookById(@UserId Integer userId) {
+    	return new ResponseEntity<>(bookService.getAllBooks(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public Book updateBook(@PathVariable Long id, @RequestBody Book updatedBook) {
-        return bookService.updateBook(id, updatedBook);
+    public ResponseEntity<BookResponse> updateBook(@PathVariable Long id, @RequestBody Book updatedBook) {
+        return new ResponseEntity<>(bookService.updateBook(id, updatedBook), HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBook(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
-    @PostMapping("/find")
-    public List<RegionWithBookRosponse> getBookByGeolocation(@UserId Integer userId){
-    	return bookService.findRegionsWithNearbyBooks(userId);
-    }
-    
-    @PostMapping("/jtw")
-    public void createBook2(@UserId Integer userId){
-    	
-    	 System.out.println(userId);
+    @GetMapping("/regions")
+    public ResponseEntity<List<RegionWithBookRosponse>> getBookByGeolocation(@UserId Integer userId){
+    	return new ResponseEntity<>(bookService.findRegionsWithNearbyBooks(userId), HttpStatus.OK);
     }
     
 }

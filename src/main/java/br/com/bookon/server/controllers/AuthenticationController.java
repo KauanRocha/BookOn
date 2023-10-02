@@ -1,6 +1,7 @@
 package br.com.bookon.server.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,12 +28,12 @@ public class AuthenticationController {
 
     @PostMapping("/auth/login")
     public ResponseEntity<?> authenticate(@Valid @RequestBody LoginRequest loginRequest) {
-        return authService.authenticate(loginRequest);
+        return new ResponseEntity<>(authService.authenticate(loginRequest), HttpStatus.OK);
     }
 
     @PostMapping("/auth/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest signUpRequest) {
-        return userService.register(signUpRequest);
+        return new ResponseEntity<>(userService.register(signUpRequest), HttpStatus.OK);
     }
 
 }
