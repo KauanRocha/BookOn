@@ -12,5 +12,6 @@ import br.com.bookon.server.models.mongo.Loan;
 public interface LoanRepository extends MongoRepository<Loan, String>{
 	
     List<Loan> findByLenderUserIdAndStatus(Integer lenderId, LoanStatusEnum status);
-
+    
+    Boolean  existsByIdAndLenderUserId(String id, Integer lenderUserId);
 }
