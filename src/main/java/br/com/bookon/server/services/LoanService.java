@@ -8,7 +8,9 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import br.com.bookon.server.enumerations.LoanStatusEnum;
-import br.com.bookon.server.exceptions.NotFoundException;
+import br.com.bookon.server.exceptions.BookNotFoundException;
+import br.com.bookon.server.exceptions.LoanNotFoundException;
+import br.com.bookon.server.exceptions.UserNotFoundException;
 import br.com.bookon.server.models.mongo.BookMongo;
 import br.com.bookon.server.models.mongo.Loan;
 import br.com.bookon.server.models.mongo.UserMongo;
@@ -67,13 +69,13 @@ public class LoanService {
     
     public LoanResponse createPropose(LoanRequest loanRequest, Integer borrowerId) {
         User borrowerPostgres = userRepository.findById(borrowerId)
-        		.orElseThrow(() -> new NotFoundException("not-found-user-with-id: " + borrowerId));
+        		.orElseThrow(() -> new UserNotFoundException());
         
         User lenderPostgres = userRepository.findById(loanRequest.getLenderId())
-        		.orElseThrow(() -> new NotFoundException("not-found-user-with-id: " + loanRequest.getLenderId()));
+        		.orElseThrow(() -> new UserNotFoundException());
         
         Book bookPostgres = bookRepository.findById(loanRequest.getBookId())
-        		.orElseThrow(() -> new NotFoundException("not-found-book-with-id: " + loanRequest.getBookId()));
+        		.orElseThrow(() -> new BookNotFoundException());
         
         var loan = new Loan();
         loan.setBorrowerUser(new UserMongo(borrowerPostgres));
@@ -95,7 +97,7 @@ public class LoanService {
     
     public void approvePropose(String loanId, Integer lenderUserId) {
     	if (loanNotExists(loanId,lenderUserId)) {
-    		throw new NotFoundException("not-found-loan-with-lender-id: " + lenderUserId);
+    		throw new LoanNotFoundException();
     	}
     	updateLoanStatusForApproved(loanId);
     }
