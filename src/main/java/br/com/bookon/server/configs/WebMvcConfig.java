@@ -1,10 +1,10 @@
-package br.com.bookon.server.config;
+package br.com.bookon.server.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import br.com.bookon.server.argumentResolvers.UserIdArgumentResolver;
+import br.com.bookon.server.resolvers.UserIdArgumentResolver;
 
 import java.util.List;
 

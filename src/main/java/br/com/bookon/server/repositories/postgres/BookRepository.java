@@ -1,4 +1,6 @@
-package br.com.bookon.server.repository.postgres;
+package br.com.bookon.server.repositories.postgres;
+
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.ListCrudRepository;
@@ -11,5 +13,7 @@ import br.com.bookon.server.models.postgres.Book;
 public interface BookRepository extends PagingAndSortingRepository<Book, Long>, JpaSpecificationExecutor<Book>, ListCrudRepository<Book, Long> {
 
     Book findBookById(Long id);
+    
+    List<Book> findBookByUserId(Integer userId);
     
 }

@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +20,9 @@ import br.com.bookon.server.payload.response.postgres.MessageResponse;
 import br.com.bookon.server.payload.response.postgres.RegionWithUsersRosponse;
 import br.com.bookon.server.payload.response.postgres.NominatimAdressResponse.AddressParts;
 import br.com.bookon.server.payload.response.postgres.NominatimGeolocationResponse.Place;
-import br.com.bookon.server.repository.postgres.RoleRepository;
-import br.com.bookon.server.repository.postgres.UserRepository;
-import br.com.bookon.server.specification.UserSpecification;
+import br.com.bookon.server.repositories.postgres.RoleRepository;
+import br.com.bookon.server.repositories.postgres.UserRepository;
+import br.com.bookon.server.specifications.UserSpecification;
 
 
 @Service
@@ -50,17 +49,13 @@ public class UserService {
         return userRepository.findAll(spec.search(filterRequest, User.class), filterRequest.build());
     }
     
-    public ResponseEntity<?> register(RegisterRequest signUpRequest) {
+    public MessageResponse register(RegisterRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+            return new MessageResponse("Error: Username is already taken!");
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+            return new MessageResponse("Error: Email is already in use!");
         }
 
         User user = new User();
@@ -72,7 +67,7 @@ public class UserService {
         populateAddressValues(user, signUpRequest);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return new MessageResponse("User registered successfully!");
     }
     
     public Set<Role> strRolesForEnum(Set<String> strRoles) {

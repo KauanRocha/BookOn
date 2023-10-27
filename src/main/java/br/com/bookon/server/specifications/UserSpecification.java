@@ -1,4 +1,4 @@
-package br.com.bookon.server.specification;
+package br.com.bookon.server.specifications;
 
 import java.util.ArrayList;
 import java.util.List;

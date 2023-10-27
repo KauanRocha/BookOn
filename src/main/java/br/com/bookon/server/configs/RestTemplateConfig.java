@@ -1,4 +1,4 @@
-package br.com.bookon.server.config;
+package br.com.bookon.server.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

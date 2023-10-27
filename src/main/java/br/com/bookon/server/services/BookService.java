@@ -1,18 +1,18 @@
 package br.com.bookon.server.services;
 
+import br.com.bookon.server.exceptions.NotFoundException;
 import br.com.bookon.server.models.postgres.Book;
 import br.com.bookon.server.models.postgres.User;
 import br.com.bookon.server.payload.request.postgres.BookRequest;
 import br.com.bookon.server.payload.response.postgres.BookResponse;
 import br.com.bookon.server.payload.response.postgres.RegionWithBookRosponse;
 import br.com.bookon.server.payload.response.postgres.RegionWithUsersRosponse;
-import br.com.bookon.server.repository.postgres.BookRepository;
-import br.com.bookon.server.repository.postgres.UserRepository;
+import br.com.bookon.server.repositories.postgres.BookRepository;
+import br.com.bookon.server.repositories.postgres.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,44 +31,46 @@ public class BookService {
     private UserService userService;
     
 
-    public ResponseEntity<?> createBook(BookRequest bookRequest, Integer userId){
+    public BookResponse createBook(BookRequest bookRequest, Integer userId){
 
         Book book = bookRequest.build();
 		
 		Optional<User> user = userRepository.findById(userId);
 		  if (user.isEmpty()) { 
-			  return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found."); 
+			  new NotFoundException("user-not-found-by-id: " + userId);
 		  }
 		  book.setUser(user.get());
 		  
-        return ResponseEntity.status(HttpStatus.CREATED).body(new BookResponse(bookRepository.save(book)));
+        return new BookResponse(bookRepository.save(book));
     }
 
-    public ResponseEntity<List<?>> getAllBooks() {
+    public List<BookResponse> getAllBooks() {
     	List<Book> books = bookRepository.findAll();
     	List<BookResponse> bookResponses = books.stream()
 	            .map(BookResponse::new)
 	            .collect(Collectors.toList());
     	
-        return ResponseEntity.status(HttpStatus.OK).body(bookResponses);
+        return bookResponses;
     }
 
-    public Book getBookById(Long id) {
-        return bookRepository.findBookById(id);
+    public List<Book> getBookByUserId(Integer userId) {
+        return bookRepository.findBookByUserId(userId);
     }
 
-    public Book updateBook(Long id, Book updatedBook) {
-        Book existingBook = getBookById(id);
+    @Transactional
+    public BookResponse updateBook(Long id, Book updatedBook) {
+        Book existingBook = bookRepository.findBookById(id);
 
         existingBook.setTitle(updatedBook.getTitle());
         existingBook.setAuthor(updatedBook.getAuthor());
         existingBook.setCategory(updatedBook.getCategory());
 
-        return bookRepository.save(existingBook);
+        return new BookResponse(bookRepository.save(existingBook));
     }
 
+    @Transactional
     public void deleteBook(Long id) {
-        Book existingBook = getBookById(id);
+        Book existingBook = bookRepository.findBookById(id);
         bookRepository.delete(existingBook);
     }
     

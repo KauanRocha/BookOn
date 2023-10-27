@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.bookon.server.enumerations.RoleEnum;
 import br.com.bookon.server.models.postgres.Role;
-import br.com.bookon.server.repository.postgres.RoleRepository;
+import br.com.bookon.server.repositories.postgres.RoleRepository;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
