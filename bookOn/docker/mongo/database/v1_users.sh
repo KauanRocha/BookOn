@@ -1,1 +1,0 @@
-mongosh -u server -p server --authenticationDatabase admin localhost/bookon --eval 'db.createUser({ user: "server", pwd: "server", roles: [ { role: "root", db: "admin" }, { role: "dbOwner", db: "bookon" }, { role: "readWrite", db: "bookon" }, { role: "dbAdmin", db: "bookon" } ] });'
