@@ -9,6 +9,8 @@ public class RegionWithBookRosponse {
 	private double latitude;
 	
 	private double longitude;
+	
+	private double distance;
 
 	public List<BookResponse> getBooks() {
 		return books;
@@ -32,6 +34,14 @@ public class RegionWithBookRosponse {
 
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
+	}
+	
+	public double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 
 	public RegionWithBookRosponse() {

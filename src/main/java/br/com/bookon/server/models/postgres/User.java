@@ -55,8 +55,14 @@ public class User implements Serializable{
 
     public User() {
     }
+    
+    public User(Double latitude, Double longitude) {
+		super();
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
 
-    public User(String username, String email, String password) {
+	public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;

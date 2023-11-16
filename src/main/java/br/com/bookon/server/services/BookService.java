@@ -74,8 +74,17 @@ public class BookService {
         bookRepository.delete(existingBook);
     }
     
-    public List<RegionWithBookRosponse> findRegionsWithNearbyBooks(Integer userFinderId) {
-    	List<RegionWithUsersRosponse> regionsWithUsers = userService.findRegionsWithNearbyUsers(userFinderId);
+    public List<RegionWithBookRosponse> findRegionsWithNearbyBooksByUserGeolocation(Integer userFinderId) {
+    	List<RegionWithUsersRosponse> regionsWithUsers = userService.findRegionsWithNearbyUsersByUserGeolocation(userFinderId);
+        List<RegionWithBookRosponse> regionsWithBooks = regionsWithUsers.stream()
+            .map(RegionWithUsersRosponse::toRegionWithBookRosponse)
+            .collect(Collectors.toList());
+    	
+    	return regionsWithBooks;
+    }
+    
+    public List<RegionWithBookRosponse> findRegionsWithNearbyBooksByAddress(Integer userFinderId, String address) {
+    	List<RegionWithUsersRosponse> regionsWithUsers = userService.findRegionsWithNearbyUsersByAdress(userFinderId, address);
         List<RegionWithBookRosponse> regionsWithBooks = regionsWithUsers.stream()
             .map(RegionWithUsersRosponse::toRegionWithBookRosponse)
             .collect(Collectors.toList());

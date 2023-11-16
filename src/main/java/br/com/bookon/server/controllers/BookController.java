@@ -50,9 +50,14 @@ public class BookController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
-    @GetMapping("/regions")
+    @GetMapping("/regions/geolocation")
     public ResponseEntity<List<RegionWithBookRosponse>> getBookByGeolocation(@UserId Integer userId){
-    	return new ResponseEntity<>(bookService.findRegionsWithNearbyBooks(userId), HttpStatus.OK);
+    	return new ResponseEntity<>(bookService.findRegionsWithNearbyBooksByUserGeolocation(userId), HttpStatus.OK);
+    }
+    
+    @GetMapping("/regions/address")
+    public ResponseEntity<List<RegionWithBookRosponse>> getBookByAddress(@UserId Integer userId, @RequestBody String address){
+    	return new ResponseEntity<>(bookService.findRegionsWithNearbyBooksByAddress(userId, address), HttpStatus.OK);
     }
     
 }

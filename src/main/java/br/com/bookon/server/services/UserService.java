@@ -103,7 +103,7 @@ public class UserService {
         return roles;
     }
     
-    public List<RegionWithUsersRosponse> findRegionsWithNearbyUsers(Integer userFinderId) {
+    public List<RegionWithUsersRosponse> findRegionsWithNearbyUsersByUserGeolocation(Integer userFinderId) {
     	User userFinder = userRepository.findById(userFinderId).orElse(null);
     	
     	List<User> nearbyUsers = userRepository.findNearbyUsersOrderByDistance(
@@ -124,6 +124,7 @@ public class UserService {
     	        RegionWithUsersRosponse regionWithUsers = new RegionWithUsersRosponse();
     	        regionWithUsers.setUsers(usersInRegion);
     	        regionWithUsers.populateCoordinates();
+    	        regionWithUsers.setDistance(calculateDistance(userFinder, new User(regionWithUsers.getLatitude(), regionWithUsers.getLongitude())));
     	        
     	        listRegionWithUsers.add(regionWithUsers);
     	    }
@@ -165,6 +166,7 @@ public class UserService {
 		
         Place geolocation = geolocationService.geocodeAddress(
             		signUpRequest.getAddress()).getPlace();
+        
         AddressParts address = geolocationService.getCityStateCountry(
         		geolocation.getLatitude(), geolocation.getLongitude())
         		.getAddressparts();
@@ -174,6 +176,44 @@ public class UserService {
         user.setCity(address.getCity() != null ? address.getCity() : address.getTown());
         user.setState(address.getState());
         return user;
+    }
+    
+    public User populateGeolocation(User user, String address) {
+    	Place geolocation = geolocationService.geocodeAddress(address).getPlace();
+		user.setLatitude(geolocation.getLatitude());
+	    user.setLongitude(geolocation.getLongitude());
+    
+    return user;
+    }
+    
+    public List<RegionWithUsersRosponse> findRegionsWithNearbyUsersByAdress(Integer userFinderId, String address) {
+    	User userFinder = userRepository.findById(userFinderId).orElse(null);
+    	populateGeolocation(userFinder, address);
+    	
+    	List<User> nearbyUsers = userRepository.findNearbyUsersOrderByDistance(
+    			userFinder.getId(), userFinder.getLatitude(), userFinder.getLongitude(), MAX_DISTANCE);
+    	
+    	List<RegionWithUsersRosponse> listRegionWithUsers = new ArrayList<>();
+    	
+    	 while (!nearbyUsers.isEmpty()) {
+    	        User closestUser = nearbyUsers.get(0);
+
+    	        List<User> usersInRegion = nearbyUsers.stream()
+    	            .filter(otherUser -> calculateDistance(closestUser, otherUser) <= 2)
+    	            .collect(Collectors.toList());
+    	        usersInRegion.add(closestUser);
+
+    	        nearbyUsers.removeAll(usersInRegion);
+
+    	        RegionWithUsersRosponse regionWithUsers = new RegionWithUsersRosponse();
+    	        regionWithUsers.setUsers(usersInRegion);
+    	        regionWithUsers.populateCoordinates();
+    	        regionWithUsers.setDistance(calculateDistance(userFinder, new User(regionWithUsers.getLatitude(), regionWithUsers.getLongitude())));
+    	        
+    	        listRegionWithUsers.add(regionWithUsers);
+    	    }
+    	return listRegionWithUsers;
+
     }
 
 }
