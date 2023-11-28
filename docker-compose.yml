@@ -36,6 +36,17 @@ services:
       - "27017:27017"
     networks:
       - bookon-network
+      
+  jenkins:
+    image: jenkinsci/blueocean
+    ports:
+      - '18099:8099'
+    volumes:
+      - 'jenkins_home:/var/jenkins_home'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+volumes:
+  jenkins_home:
+    driver: local
 
 networks:
   bookon-network:
