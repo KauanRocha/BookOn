@@ -18,6 +18,7 @@ import br.com.bookon.server.payload.request.postgres.FilterRequest;
 import br.com.bookon.server.payload.request.postgres.RegisterRequest;
 import br.com.bookon.server.payload.response.postgres.MessageResponse;
 import br.com.bookon.server.payload.response.postgres.RegionWithUsersRosponse;
+import br.com.bookon.server.payload.response.postgres.UserResponse;
 import br.com.bookon.server.payload.response.postgres.NominatimAdressResponse.AddressParts;
 import br.com.bookon.server.payload.response.postgres.NominatimGeolocationResponse.Place;
 import br.com.bookon.server.repositories.postgres.RoleRepository;
@@ -48,6 +49,7 @@ public class UserService {
         UserSpecification spec = new UserSpecification();
         return userRepository.findAll(spec.search(filterRequest, User.class), filterRequest.build());
     }
+    
     
     public MessageResponse register(RegisterRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -130,6 +132,15 @@ public class UserService {
     	    }
     	return listRegionWithUsers;
 
+    }
+    
+    public UserResponse getGeolocation(Integer userId) {
+    	
+    	User user = userRepository.findById(userId).orElseThrow();
+    	
+    	var userResponse = new UserResponse(user);
+    	
+    	return userResponse;
     }
     
     private double calculateDistance(User closestUser, User otherUser ) {

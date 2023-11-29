@@ -14,7 +14,7 @@ public class BookResponse {
 	        return book.getTitle();
 	    }
 	    
-	    public String getBookAUthor() {
+	    public String getBookAuthor() {
 	        return book.getAuthor();
 	    }
 
