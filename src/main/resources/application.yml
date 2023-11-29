@@ -15,7 +15,8 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
-
+    
+    
   data:
     mongodb:
       host: localhost
@@ -23,7 +24,6 @@ spring:
       database: bookon
       username: server
       password: server
-
 
 bezkoder:
    app:

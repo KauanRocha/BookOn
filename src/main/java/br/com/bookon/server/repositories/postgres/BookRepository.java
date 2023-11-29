@@ -1,4 +1,6 @@
-package br.com.bookon.server.repository.postgres;
+package br.com.bookon.server.repositories.postgres;
+
+import java.util.List;
 
 import java.util.List;
 

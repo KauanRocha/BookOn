@@ -12,6 +12,8 @@ public class RegionWithUsersRosponse {
 	private double latitude;
 	
 	private double longitude;
+	
+	private double distance;
 
 	public List<User> getUsers() {
 		return users;
@@ -37,6 +39,13 @@ public class RegionWithUsersRosponse {
 		this.longitude = longitude;
 	}
 	
+	public double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(double distance) {
+		this.distance = distance;
+	}
 
 	public RegionWithUsersRosponse() {
 	}
@@ -76,6 +85,7 @@ public class RegionWithUsersRosponse {
 		regionWithBookRosponse.setBooks(this.getBooksFromUsers());
 		regionWithBookRosponse.setLatitude(this.latitude);
 		regionWithBookRosponse.setLongitude(this.longitude);
+		regionWithBookRosponse.setDistance(this.distance);
 		
 		return regionWithBookRosponse;
 	}

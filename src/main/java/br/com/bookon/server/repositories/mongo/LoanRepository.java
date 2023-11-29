@@ -1,4 +1,4 @@
-package br.com.bookon.server.repository.mongo;
+package br.com.bookon.server.repositories.mongo;
 
 import java.util.List;
 

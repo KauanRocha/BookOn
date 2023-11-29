@@ -10,8 +10,6 @@ public class UserResponse {
 
     private User user;
     
-    private Integer distance;
-
     public UserResponse(User user) {
         this.user = user;
     }
@@ -23,6 +21,14 @@ public class UserResponse {
     public String getEmail() {
         return user.getEmail();
     }
+    
+    public Double getLatitude() {
+		return user.getLatitude();
+	}
+	
+    public Double getLongitude() {
+		return user.getLongitude();
+	}
 
     public Set<RoleResponse> getRoles() {
         return user.getRoles().stream().map(RoleResponse::new).collect(Collectors.toSet());
@@ -30,14 +36,6 @@ public class UserResponse {
     
     public List<BookResponse> getBooks() {
 		return user.getBooks().stream().map(BookResponse::new).collect(Collectors.toList());
-	}
-
-	public Integer getDistance() {
-		return distance;
-	}
-
-	public void setDistance(Integer distance) {
-		this.distance = distance;
 	}
     
 }

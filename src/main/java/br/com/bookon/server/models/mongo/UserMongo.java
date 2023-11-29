@@ -6,6 +6,8 @@ public class UserMongo {
 
 	private Integer id;
 	private String name;
+	private String email;
+
 
 	public Integer getId() {
 		return id;
@@ -19,10 +21,16 @@ public class UserMongo {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public UserMongo(User user) {
 		this.id = user.getId();
 		this.name = user.getUsername();
+		this.email = user.getEmail();
 		
 	}
 	

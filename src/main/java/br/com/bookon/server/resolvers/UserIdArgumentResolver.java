@@ -1,4 +1,4 @@
-package br.com.bookon.server.argumentResolvers;
+package br.com.bookon.server.resolvers;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;

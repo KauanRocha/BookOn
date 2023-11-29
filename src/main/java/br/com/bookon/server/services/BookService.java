@@ -7,8 +7,8 @@ import br.com.bookon.server.payload.request.postgres.BookRequest;
 import br.com.bookon.server.payload.response.postgres.BookResponse;
 import br.com.bookon.server.payload.response.postgres.RegionWithBookRosponse;
 import br.com.bookon.server.payload.response.postgres.RegionWithUsersRosponse;
-import br.com.bookon.server.repository.postgres.BookRepository;
-import br.com.bookon.server.repository.postgres.UserRepository;
+import br.com.bookon.server.repositories.postgres.BookRepository;
+import br.com.bookon.server.repositories.postgres.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,8 +74,17 @@ public class BookService {
         bookRepository.delete(existingBook);
     }
     
-    public List<RegionWithBookRosponse> findRegionsWithNearbyBooks(Integer userFinderId) {
-    	List<RegionWithUsersRosponse> regionsWithUsers = userService.findRegionsWithNearbyUsers(userFinderId);
+    public List<RegionWithBookRosponse> findRegionsWithNearbyBooksByUserGeolocation(Integer userFinderId) {
+    	List<RegionWithUsersRosponse> regionsWithUsers = userService.findRegionsWithNearbyUsersByUserGeolocation(userFinderId);
+        List<RegionWithBookRosponse> regionsWithBooks = regionsWithUsers.stream()
+            .map(RegionWithUsersRosponse::toRegionWithBookRosponse)
+            .collect(Collectors.toList());
+    	
+    	return regionsWithBooks;
+    }
+    
+    public List<RegionWithBookRosponse> findRegionsWithNearbyBooksByAddress(Integer userFinderId, String address) {
+    	List<RegionWithUsersRosponse> regionsWithUsers = userService.findRegionsWithNearbyUsersByAdress(userFinderId, address);
         List<RegionWithBookRosponse> regionsWithBooks = regionsWithUsers.stream()
             .map(RegionWithUsersRosponse::toRegionWithBookRosponse)
             .collect(Collectors.toList());

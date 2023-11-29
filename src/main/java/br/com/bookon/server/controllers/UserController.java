@@ -3,11 +3,13 @@ package br.com.bookon.server.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.bookon.server.annotations.UserId;
 import br.com.bookon.server.payload.request.postgres.FilterRequest;
 import br.com.bookon.server.payload.response.postgres.UserResponse;
 import br.com.bookon.server.services.UserService;
@@ -22,6 +24,12 @@ public class UserController {
     @PostMapping("/users/search")
     public Page<UserResponse> search(@RequestBody FilterRequest filterRequest) {
         return userService.list(filterRequest).map(UserResponse::new);
+    }
+    
+    
+    @GetMapping("/user/geolocation")
+    public UserResponse getMyGeolocation(@UserId Integer id) {
+        return userService.getMyGeolocation(id);
     }
     
 }
