@@ -134,7 +134,7 @@ public class UserService {
 
     }
     
-    public UserResponse getGeolocation(Integer userId) {
+    public UserResponse getMyGeolocation(Integer userId) {
     	
     	User user = userRepository.findById(userId).orElseThrow();
     	

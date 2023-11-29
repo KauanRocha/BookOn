@@ -27,9 +27,9 @@ public class UserController {
     }
     
     
-    @GetMapping("/users/geolocation")
-    public UserResponse getGeolocation(@UserId Integer id) {
-        return userService.getGeolocation(id);
+    @GetMapping("/user/geolocation")
+    public UserResponse getMyGeolocation(@UserId Integer id) {
+        return userService.getMyGeolocation(id);
     }
     
 }
